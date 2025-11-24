@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Complaints</title>
+    <link rel="stylesheet" href="compliance.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <main class="complaints-main">
+        <h1>Admin Complaints</h1>
+        <div id="complaintsList" class="complaints-list">
+            <!-- Complaints will be loaded here -->
+        </div>
+        
+    </main>
+    <script>
+        function loadComplaints() {
+            const complaintsList = document.getElementById('complaintsList');
+            let complaints = JSON.parse(localStorage.getItem('adminComplaints')) || [];
+            if (complaints.length === 0) {
+                complaintsList.innerHTML = '<p>No complaints submitted yet.</p>';
+                return;
+            }
+            complaintsList.innerHTML = '';
+            complaints.forEach((complaint, index) => {
+                const complaintDiv = document.createElement('div');
+                complaintDiv.classList.add('complaint-card');
+                complaintDiv.innerHTML = `
+                    <h3>Type: ${complaint.type} - ${complaint.reportType}</h3>
+                    <p><strong>Description:</strong> ${complaint.description}</p>
+                    <p><strong>Date:</strong> ${complaint.date}</p>
+                    <p><em>Submitted at: ${new Date(complaint.submittedAt).toLocaleString()}</em></p>
+                    <button onclick="resolveComplaint(${index})" class="resolve-btn">Resolve</button>
+                    <hr>
+                `;
+                complaintsList.appendChild(complaintDiv);
+            });
+        }
+
+        function resolveComplaint(index) {
+            let complaints = JSON.parse(localStorage.getItem('adminComplaints')) || [];
+            complaints.splice(index, 1);
+            localStorage.setItem('adminComplaints', JSON.stringify(complaints));
+            loadComplaints();
+        }
+
+        window.onload = loadComplaints;
+    </script>
+</body>
+</html>
+
+
+
+
+

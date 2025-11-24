@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Home</title>
+    <link rel="stylesheet" href="trainer_home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+ <div class="vishnu">
+     <nav class="navbar">
+          <div class="navbar-container">
+                <a href="home.html" class="navbar-brand">📚 LMS Project</a>
+                <ul class="navbar-menu">
+                    <div class="search-bar">
+                      <input type="text" id="searchInput" placeholder="Search features..." onkeyup="filterFeatures()" />
+                    </div>
+                     <li class="navbar-item"><a href="home.html" class="navbar-link"><i class="fas fa-home"></i> Home</a></li>
+                     <li class="navbar-item"><a href="trainer_home.html" class="navbar-link"><i class="fas fa-chalkboard-teacher"></i> Trainer</a></li>
+                     <li class="navbar-item"><a href="student_home.html" class="navbar-link"><i class="fas fa-graduation-cap"></i> Student</a></li>
+                     <li class="navbar-item profile-display" id="profileDisplay" style="display: none;"><a href="trainer_profile.html" class="navbar-link"><i class="fas fa-user-circle"></i> <span id="userName"></span> (<span id="userRole"></span>)</a></li>
+                    <li class="navbar-item"><a href="login.html" class="navbar-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+          </div>
+        </nav>
+   </div>
+    <aside class="sidebar">
+        <ul class="featuresList">
+             <li><a href="trainer_dashboard.html"><i class="fas fa-chart-bar"></i>Trainer Dashboard</a></li>
+            <li><a href="view_report.html"><i class="fas fa-file-alt"></i> View Reports</a></li>
+            <li><a href="add_recorded_class_upload.html"><i class="fa-solid fa-video"></i> Add Recorded class</a></li>
+            <li><a href="add_live_class.html"><i class="fa-solid fa-video"></i> Add live class</a></li>
+            <li><a href="security_settings.html"><i class="fas fa-lock"></i> Security Settings</a></li>
+            <li><a href="performance_metrics.html"><i class="fas fa-trophy"></i> Performance Metrics</a></li>
+            <li><a href="trainer_compliance.html"><i class="fas fa-check-circle"></i> Compliance</a></li>
+            <li><a href="trainer_system_updates.html"><i class="fas fa-sync-alt"></i> System Updates</a></li>
+            <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+            <li><a href="trainer_assignments.html"><i class="fas fa-tasks"></i> Assignments</a></li>
+            <li><a href="veiw_Student_Att.html"><i class="fas fa-calendar-check"></i> student Attendance</a></li>
+            <li><a href="trainer_attendance.html"><i class="fas fa-calendar-check"></i>trainer Attendance</a></li>
+            <li><a href="add_trainer.html "><i class="fas fa-envelope"></i> add trainer</a></li>
+            <a href="trainer_grades.html"><i class="fas fa-calendar-check"></i>Student Grades</a></li>
+            
+            
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <section class="content-display">
+            <div id="featureContent" style="margin-top: 20px; padding: 20px; border: 1px solid #ddd; background-color: #f9f9f9; display: none;">
+                <h3 id="contentTitle">Selected Feature Content</h3>
+                <div id="contentArea"></div>
+            </div>
+        </section>
+
+       
+    </main>
+    <script>
+        function filterFeatures() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const lists = document.querySelectorAll('.featuresList');
+            lists.forEach(ul => {
+                const li = ul.getElementsByTagName('li');
+                for (let i = 0; i < li.length; i++) {
+                    const a = li[i].getElementsByTagName('a')[0];
+                    const textValue = a.textContent || a.innerText;
+                    if (textValue.toLowerCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+            });
+        }
+
+        function loadFeatureContent(title, url) {
+            const contentDiv = document.getElementById('featureContent');
+            const contentTitle = document.getElementById('contentTitle');
+            const contentArea = document.getElementById('contentArea');
+
+            contentTitle.textContent = title;
+            contentArea.innerHTML = `<iframe src="${url}" width="100%" height="600px" frameborder="0"></iframe>`;
+            contentDiv.style.display = 'block';
+
+            // Scroll to the content
+            contentDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.featuresList a');
+            links.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const title = this.textContent;
+                    const url = this.getAttribute('href');
+                    loadFeatureContent(title, url);
+                });
+            });
+
+            // Display user profile if logged in
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                const userName = document.getElementById('userName');
+                const userRole = document.getElementById('userRole');
+                userName.textContent = currentUser.name;
+                userRole.textContent = currentUser.role;
+
+                // Show profile display in navbar
+                const profileDisplay = document.getElementById('profileDisplay');
+                profileDisplay.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

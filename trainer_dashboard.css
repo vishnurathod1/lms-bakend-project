@@ -1,0 +1,129 @@
+.navbar {
+    background-color: #e2d8d8;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.search-bar input {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+}
+
+.navbar-brand {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-item {
+    margin-left: 30px;
+    justify-content: space-between;
+}
+
+.navbar-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+    justify-content: space-between;
+    display: flex;
+}
+
+.navbar-link:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+.navbar-link.active {
+    background-color: #667eea;
+    border-radius: 5px;
+}
+
+/* Adjust body padding for fixed navbar */
+body {
+    padding-top: 60px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 20px 0;
+    width: 100%;
+
+}
+
+.graph-container {
+    background: #e9c0c0;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.graph-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+canvas {
+    max-width: 100%;
+    height: 300px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Additional styles */
+.trainer-container h1 {
+    color: #333;
+    text-align: center;
+}
+
+.trainer-container p {
+    text-align: center;
+    color: #666;
+}
+
+.graph-container h3 {
+    color: #555;
+    margin-bottom: 10px;
+}

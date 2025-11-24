@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Metrics</title>
+    <link rel="stylesheet" href="performance_metrics.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+    <main class="metrics-main">
+        <h1>Performance Metrics</h1>
+
+        <!-- Trainer Metrics Section -->
+        <section class="trainer-metrics">
+            <h2>Trainer Performance Metrics</h2>
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Courses Managed</h3>
+                    <p id="coursesManaged">10</p>
+                    <div class="graph-bar" style="width: 50%;"></div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Trainees</h3>
+                    <p id="totalTrainees">150</p>
+                    <div class="graph-bar" style="width: 75%;"></div>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Rating</h3>
+                    <p id="avgRating">4.5</p>
+                    <div class="graph-bar" style="width: 90%;"></div>
+                </div>
+                <div class="stat-card">
+                    <h3>Completion Rate</h3>
+                    <p id="completionRate">85%</p>
+                    <div class="graph-bar" style="width: 85%; background-color: #4CAF50;"></div>
+                </div>
+            </div>
+            <div class="chart-section">
+                <h2>Trainer Activity Overview</h2>
+                <canvas id="trainerChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Student Metrics Section -->
+        <section class="student-metrics">
+            <h2>Student Performance Metrics</h2>
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Courses Enrolled</h3>
+                    <p id="coursesEnrolled">5</p>
+                    <div class="graph-bar" style="width: 50%;"></div>
+                </div>
+                <div class="stat-card">
+                    <h3>Assignments Completed</h3>
+                    <p id="assignmentsCompleted">20</p>
+                    <div class="graph-bar" style="width: 40%;"></div>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Grade</h3>
+                    <p id="avgGrade">B+</p>
+                    <div class="graph-bar" style="width: 70%;"></div>
+                </div>
+                <div class="stat-card">
+                    <h3>Study Hours</h3>
+                    <p id="studyHours">120</p>
+                    <div class="graph-bar" style="width: 60%;"></div>
+                </div>
+            </div>
+            <div class="chart-section">
+                <h2>Student Progress Overview</h2>
+                <canvas id="studentChart"></canvas>
+            </div>
+        </section>
+    </main>
+    <script>
+        // Trainer Chart
+        const trainerCtx = document.getElementById('trainerChart').getContext('2d');
+        new Chart(trainerCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Courses', 'Trainees', 'Ratings', 'Completions'],
+                datasets: [{
+                    label: 'Trainer Metrics',
+                    data: [10, 150, 4.5, 85],
+                    backgroundColor: '#667eea',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Student Chart
+        const studentCtx = document.getElementById('studentChart').getContext('2d');
+        new Chart(studentCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Assignments Completed',
+                    data: [5, 10, 15, 20],
+                    backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                    borderColor: '#667eea',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

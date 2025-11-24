@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management</title>
+    <link rel="stylesheet" href="attendance.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <div class="container">
+        <h1>Attendance Management</h1>
+ 
+        <div class="form-section">
+            <h2>Add Attendance</h2>
+            <form id="attendanceForm">
+                <label for="userType">User Type:</label>
+                <select id="userType" required>
+                    <option value="student">Student</option>
+                    <option value="trainer">Trainer</option>
+                </select>
+ 
+                <label for="userName">User Name:</label>
+                <input type="text" id="userName" required>
+ 
+                <label for="date">Date:</label>
+                <input type="date" id="date" required>
+ 
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" required>
+ 
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime" required>
+ 
+ 
+ 
+                <button type="submit">Add Attendance</button>
+            </form>
+        </div>
+ 
+        <div class="table-section">
+            <h2>Attendance Records</h2>
+            <table id="attendanceTable">
+                <thead>
+                    <tr>
+                        <th>User Type</th>
+                        <th>User Name</th>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Hours</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Records will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+        <script>
+        // Function to calculate hours between start and end time
+        function calculateHours(startTime, endTime) {
+            if (!startTime || !endTime) return 0;
+            const start = new Date(`1970-01-01T${startTime}:00`);
+            const end = new Date(`1970-01-01T${endTime}:00`);
+            const diffMs = end - start;
+            const diffHours = diffMs / (1000 * 60 * 60);
+            return diffHours > 0 ? diffHours : 0; // Ensure non-negative
+        }
+ 
+        // Load attendance records from localStorage
+        function loadAttendance() {
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            const tbody = document.querySelector('#attendanceTable tbody');
+            tbody.innerHTML = '';
+ 
+            attendance.forEach((record, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.userType}</td>
+                    <td>${record.userName}</td>
+                    <td>${record.date}</td>
+                    <td>${record.startTime || ''}</td>
+                    <td>${record.endTime || ''}</td>
+                    <td>${record.hours || ''}</td>
+                    <td>${record.status}</td>
+                    <td>
+                        <button onclick="editRecord(${index})">Edit</button>
+                        <button onclick="deleteRecord(${index})">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+ 
+        // Add new attendance record
+        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userType = document.getElementById('userType').value;
+            const userName = document.getElementById('userName').value;
+            const date = document.getElementById('date').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+ 
+            const hours = calculateHours(startTime, endTime);
+            let status;
+            if (hours >= 8) {
+                status = 'Present';
+            } else if (hours >= 4) {
+                status = 'half day';
+            } else {
+                status = 'absent';
+            }
+ 
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            attendance.push({ userType, userName, date, startTime, endTime, hours: hours.toFixed(2), status });
+            localStorage.setItem('attendance', JSON.stringify(attendance));
+ 
+            loadAttendance();
+            this.reset();
+        });
+ 
+        // Edit record
+        function editRecord(index) {
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            const record = attendance[index];
+ 
+            document.getElementById('userType').value = record.userType;
+            document.getElementById('userName').value = record.userName;
+            document.getElementById('date').value = record.date;
+            document.getElementById('startTime').value = record.startTime;
+            document.getElementById('endTime').value = record.endTime;
+ 
+            // Remove the old record
+            attendance.splice(index, 1);
+            localStorage.setItem('attendance', JSON.stringify(attendance));
+            loadAttendance();
+        }
+ 
+        // Delete record
+        function deleteRecord(index) {
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            attendance.splice(index, 1);
+            localStorage.setItem('attendance', JSON.stringify(attendance));
+            loadAttendance();
+        }
+        // Initial load
+        loadAttendance();
+    </script>
+ 

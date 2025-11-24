@@ -1,0 +1,159 @@
+/* Styles for Contact Page */
+
+.admin-page {
+    font-family: Arial, sans-serif;
+  background:linear-gradient(55deg, white);
+    color: black;
+    margin: 0;
+    padding: 0;
+}
+
+.admin-header {
+    background-color: #3498db;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.admin-header .h11 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+
+
+.admin-main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+   
+}
+
+.admin-main h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #3498db;
+    font-size: 2em;
+}
+
+.contact-content {
+    line-height: 1.6;
+}
+
+.contact-content p {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 30px;
+}
+
+.contact-type {
+    background-color: #ecf0f1;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    flex: 1 1 300px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.contact-type h3 {
+    color: #3498db;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.contact-type p {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.contact-type i {
+    margin-right: 8px;
+    color: #e74c3c;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.submit-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-menu {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .navbar-item {
+        margin-left: 0;
+        margin-bottom: 5px;
+    }
+
+    .contact-info {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .admin-main {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .admin-header .h11 {
+        font-size: 2em;
+    }
+}

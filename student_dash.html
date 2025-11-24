@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Student Dashboard</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card i {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .dashboard-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card .stat {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .quick-actions {
+            margin-top: 40px;
+        }
+
+        .quick-actions h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inline-block;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .upcoming-deadlines {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .upcoming-deadlines h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .deadlines-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .deadline-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .deadline-item.urgent {
+            border-left-color: #e74c3c;
+            background: #ffeaea;
+        }
+
+        .deadline-item i {
+            margin-right: 15px;
+            color: #667eea;
+        }
+
+        .deadline-item.urgent i {
+            color: #e74c3c;
+        }
+
+        .deadline-content strong {
+            color: #333;
+        }
+
+        .deadline-content p {
+            margin: 5px 0 0 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .progress-charts {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .progress-charts h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .chart-item h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .chart-item p {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .notifications {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .notifications h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            opacity: 0.8;
+        }
+
+        .notification-item.unread {
+            border-left-color: #28a745;
+            background: #e8f5e8;
+            opacity: 1;
+        }
+
+        .notification-item i {
+            margin-right: 15px;
+            color: #667eea;
+        }
+
+        .notification-item.unread i {
+            color: #28a745;
+        }
+
+        .notification-content {
+            flex-grow: 1;
+        }
+
+        .notification-content strong {
+            color: #333;
+        }
+
+        .notification-time {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .recent-activity {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .recent-activity h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .activity-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .activity-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item i {
+            margin-right: 15px;
+            color: #667eea;
+        }
+
+        .activity-item .activity-content {
+            flex-grow: 1;
+        }
+
+        .activity-item .activity-time {
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+  
+
+    <main class="main-content">
+        <section class="welcome-section">
+            <h1>Welcome to Your Enhanced Student Dashboard</h1>
+            <p>Track your progress, manage assignments, and stay updated with your courses.</p>
+        </section>
+
+        <div class="dashboard-cards">
+            <div class="dashboard-card">
+                <i class="fas fa-book"></i>
+                <h3>Enrolled Courses</h3>
+                <div class="stat">5</div>
+                <p>Active courses this semester</p>
+            </div>
+            <div class="dashboard-card">
+                <i class="fas fa-tasks"></i>
+                <h3>Pending Assignments</h3>
+                <div class="stat">3</div>
+                <p>Assignments due this week</p>
+            </div>
+            <div class="dashboard-card">
+                <i class="fas fa-calendar-check"></i>
+                <h3>Attendance Rate</h3>
+                <div class="stat">95%</div>
+                <p>Overall attendance percentage</p>
+            </div>
+            <div class="dashboard-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Current GPA</h3>
+                <div class="stat">3.7</div>
+                <p>Grade point average</p>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="action-buttons">
+                <a href="courses_list.html" class="action-btn">
+                    <i class="fas fa-eye"></i> View Courses
+                </a>
+                <a href="student_assignments.html" class="action-btn">
+                    <i class="fas fa-tasks"></i> Check Assignments
+                </a>
+                <a href="student_grades.html" class="action-btn">
+                    <i class="fas fa-chart-line"></i> View Grades
+                </a>
+                <a href="student_attendance.html" class="action-btn">
+                    <i class="fas fa-calendar-alt"></i> Mark Attendance
+                </a>
+                <a href="live_class.html" class="action-btn">
+                    <i class="fas fa-video"></i> Join Live Class
+                </a>
+                <a href="contact.html" class="action-btn">
+                    <i class="fas fa-envelope"></i> Contact Support
+                </a>
+            </div>
+        </div>
+
+        <div class="upcoming-deadlines">
+            <h2>Upcoming Deadlines</h2>
+            <div class="deadlines-list">
+                <div class="deadline-item urgent">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="deadline-content">
+                        <strong>JavaScript Final Project</strong>
+                        <p>Due: Tomorrow, 11:59 PM</p>
+                    </div>
+                </div>
+                <div class="deadline-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="deadline-content">
+                        <strong>Database Midterm Exam</strong>
+                        <p>Due: Friday, 2:00 PM</p>
+                    </div>
+                </div>
+                <div class="deadline-item">
+                    <i class="fas fa-tasks"></i>
+                    <div class="deadline-content">
+                        <strong>CSS Assignment 3</strong>
+                        <p>Due: Next Monday, 9:00 AM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-charts">
+            <h2>Course Progress</h2>
+            <div class="charts-grid">
+                <div class="chart-item">
+                    <h3>JavaScript Fundamentals</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <p>75% Complete</p>
+                </div>
+                <div class="chart-item">
+                    <h3>Python Programming</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                    <p>60% Complete</p>
+                </div>
+                <div class="chart-item">
+                    <h3>Database Design</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 90%"></div>
+                    </div>
+                    <p>90% Complete</p>
+                </div>
+                <div class="chart-item">
+                    <h3>Web Development</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%"></div>
+                    </div>
+                    <p>45% Complete</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="notifications">
+            <h2>Notifications</h2>
+            <div class="notifications-list">
+                <div class="notification-item unread">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-content">
+                        <strong>New Assignment Posted:</strong> Advanced CSS Techniques
+                        <div class="notification-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i class="fas fa-calendar-plus"></i>
+                    <div class="notification-content">
+                        <strong>Live Class Scheduled:</strong> React.js Workshop - Tomorrow 10:00 AM
+                        <div class="notification-time">1 day ago</div>
+                    </div>
+                </div>
+                <div class="notification-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div class="notification-content">
+                        <strong>Grade Posted:</strong> Your Python assignment received an A-
+                        <div class="notification-time">3 days ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-activity">
+            <h2>Recent Activity</h2>
+            <ul class="activity-list">
+                <li class="activity-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="activity-content">
+                        <strong>Assignment Submitted:</strong> JavaScript Basics - Exercise 1
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <i class="fas fa-calendar-plus"></i>
+                    <div class="activity-content">
+                        <strong>Live Class Scheduled:</strong> Advanced CSS Techniques
+                        <div class="activity-time">1 day ago</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div class="activity-content">
+                        <strong>Grade Posted:</strong> Database Design - Final Project (A-)
+                        <div class="activity-time">3 days ago</div>
+                    </div>
+                </li>
+                <li class="activity-item">
+                    <i class="fas fa-book"></i>
+                    <div class="activity-content">
+                        <strong>Course Enrolled:</strong> Python Programming
+                        <div class="activity-time">1 week ago</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        function filterFeatures() {
+            const input = document.getElementById("searchInput");
+            const filter = input.value.toLowerCase();
+            const lists = document.querySelectorAll(".featuresList");
+            lists.forEach((ul) => {
+                const li = ul.getElementsByTagName("li");
+                for (let i = 0; i < li.length; i++) {
+                    const a = li[i].getElementsByTagName("a")[0];
+                    const textValue = a.textContent || a.innerText;
+                    if (textValue.toLowerCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

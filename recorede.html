@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recorded Lecture Class</title>
+    <link rel="stylesheet" href="recorded_lecture.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <main class="recorded-lecture-class-main">
+        <h1><i class="fas fa-play-circle"></i> Recorded Lecture Classes</h1>
+        <div class="recorded-lecture-class-list">
+            <!-- Recorded lectures will be dynamically added here -->
+        </div>
+    </main>
+    <script>
+        // IndexedDB helper functions
+        const dbName = 'RecordedVideosDB';
+        const storeName = 'videos';
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, 1);
+                request.onupgradeneeded = function(event) {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(storeName)) {
+                        db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
+                    }
+                };
+                request.onsuccess = function(event) {
+                    resolve(event.target.result);
+                };
+                request.onerror = function(event) {
+                    reject(event.target.error);
+                };
+            });
+        }
+
+        function getRecordedClasses() {
+            return openDB().then(db => {
+                return new Promise((resolve, reject) => {
+                    const transaction = db.transaction(storeName, 'readonly');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.getAll();
+                    request.onsuccess = function(event) {
+                        const videos = event.target.result;
+                        // Map to expected format
+                        const recordedClasses = videos.map(video => ({
+                            id: video.id,
+                            title: video.title,
+                            description: video.subject || 'No description',
+                            lecturer: video.trainer,
+                            uploadDate: video.uploadDate || new Date().toISOString(),
+                            videoSrc: video.fileData || video.url,
+                            fileName: video.fileData ? video.title + '.mp4' : null,
+                            fileSize: video.fileData ? Math.round(video.fileData.length * 3 / 4) : null
+                        }));
+                        resolve(recordedClasses);
+                    };
+                    request.onerror = function(event) {
+                        reject(event.target.error);
+                    };
+                });
+            }).catch(err => {
+                console.error('Error fetching videos from IndexedDB', err);
+                return [];
+            });
+        }
+
+        function deleteVideoFromDB(title) {
+            return openDB().then(db => {
+                return new Promise((resolve, reject) => {
+                    const transaction = db.transaction(storeName, 'readwrite');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.getAll();
+                    request.onsuccess = function(event) {
+                        const videos = event.target.result;
+                        const videoToDelete = videos.find(v => v.title === title);
+                        if (videoToDelete) {
+                            const deleteRequest = store.delete(videoToDelete.id);
+                            deleteRequest.onsuccess = () => resolve();
+                            deleteRequest.onerror = (e) => reject(e.target.error);
+                        } else {
+                            reject(new Error('Video not found'));
+                        }
+                    };
+                    request.onerror = (e) => reject(e.target.error);
+                });
+            });
+        }
+
+        async function renderRecordedClasses() {
+            const recordedClasses = await getRecordedClasses();
+            const container = document.querySelector('.recorded-lecture-class-list');
+            container.innerHTML = '';
+
+            if (recordedClasses.length === 0) {
+                container.innerHTML = `
+                    <div class="no-classes-message" style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 10px; margin: 20px 0;">
+                        <i class="fas fa-video-slash" style="font-size: 64px; color: #6c757d; margin-bottom: 20px;"></i>
+                        <h3>No recorded classes available</h3>
+                        <p>Check back later for new recorded lectures from your instructors.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            recordedClasses.forEach((recordedClass, index) => {
+                const div = document.createElement('div');
+                div.classList.add('recorded-lecture-class-item');
+
+                // Format the upload date
+                const uploadDate = new Date(recordedClass.uploadDate).toLocaleDateString();
+
+                // Determine video source and availability
+                const hasVideo = recordedClass.videoSrc || recordedClass.fileName;
+                const videoSrc = recordedClass.videoSrc || '#';
+
+                div.innerHTML = `
+                    <div class="class-header">
+                        <h3>${recordedClass.title}</h3>
+                        <span class="status-badge" style="background: #28a745; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.8em;">Available</span>
+                    </div>
+
+                    <div class="class-content">
+                        <p class="description">${recordedClass.description}</p>
+
+                        <div class="class-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user"></i>
+                                <span><strong>Lecturer:</strong> ${recordedClass.lecturer}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                <span><strong>Upload Date:</strong> ${uploadDate}</span>
+                            </div>
+                            ${recordedClass.fileName ? `
+                                <div class="meta-item">
+                                    <i class="fas fa-file-video"></i>
+                                    <span><strong>File:</strong> ${recordedClass.fileName}</span>
+                                </div>
+                            ` : ''}
+                            ${recordedClass.fileSize ? `
+                                <div class="meta-item">
+                                    <i class="fas fa-weight"></i>
+                                    <span><strong>Size:</strong> ${(recordedClass.fileSize / 1024 / 1024).toFixed(2)} MB</span>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        ${hasVideo ? `
+                            <div class="video-container">
+                                <video controls class="class-video" data-video-url="${videoSrc}" data-file-name="${recordedClass.fileName || ''}" crossorigin="anonymous">
+                                    ${recordedClass.videoSrc ? `<source src="${recordedClass.videoSrc}">` : ''}
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        ` : `
+                            <div class="no-video-message">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Video content not available</p>
+                                <small>Please contact your instructor if you expected to see a video here.</small>
+                            </div>
+                        `}
+
+                        <div class="video-error" style="display: none; color: #dc3545; margin-top: 10px; padding: 10px; background: #f8d7da; border-radius: 5px;">
+                            <p><i class="fas fa-exclamation-circle"></i> Video not available. This could be due to:</p>
+                            <ul>
+                                <li>Video file not found or corrupted</li>
+                                <li>Network connectivity issues</li>
+                                <li>Invalid video URL</li>
+                            </ul>
+                            <p><strong>Video URL:</strong> ${recordedClass.videoSrc || 'N/A'}</p>
+                        </div>
+                    </div>
+
+                    <div class="class-actions">
+                        ${hasVideo && recordedClass.videoSrc ? `
+                            <button class="btn-download" onclick="downloadVideo('${recordedClass.title}', '${recordedClass.videoSrc}')">
+                                <i class="fas fa-play"></i> Play
+                            </button>
+                        ` : ''}
+                        <button class="btn-delete" onclick="deleteVideo('${recordedClass.title}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Handle video loading errors
+        function handleVideoErrors() {
+            const videos = document.querySelectorAll('.class-video');
+            videos.forEach(video => {
+                const errorDiv = video.parentNode.parentNode.querySelector('.video-error');
+
+                video.addEventListener('error', function() {
+                    console.log('Video failed to load:', video.dataset.videoUrl);
+                    if (errorDiv) {
+                        errorDiv.style.display = 'block';
+                        video.style.display = 'none';
+                    }
+                });
+
+                video.addEventListener('loadstart', function() {
+                    console.log('Video loading started:', video.dataset.videoUrl);
+                    if (errorDiv) {
+                        errorDiv.style.display = 'none';
+                        video.style.display = 'block';
+                    }
+                });
+            });
+        }
+
+        // Download video function
+        function downloadVideo(title, videoSrc) {
+            const link = document.createElement('a');
+            link.href = videoSrc;
+            link.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.mp4`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Delete video function
+        async function deleteVideo(title) {
+            if (confirm(`Are you sure you want to delete the recorded class "${title}"? This action cannot be undone.`)) {
+                try {
+                    await deleteVideoFromDB(title);
+                    // Re-render the list
+                    await renderRecordedClasses();
+                    // Show success message
+                    alert(`Recorded class "${title}" has been deleted successfully.`);
+                    console.log(`Recorded class deleted: ${title}`);
+                } catch (err) {
+                    console.error('Error deleting video', err);
+                    alert('Error deleting video.');
+                }
+            }
+        }
+
+        // Initial render
+        (async () => {
+            await renderRecordedClasses();
+            // Handle video errors after rendering
+            setTimeout(handleVideoErrors, 100);
+        })();
+
+        // Auto-refresh every 30 seconds to check for new recorded classes
+        setInterval(async () => {
+            await renderRecordedClasses();
+            handleVideoErrors();
+        }, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,660 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(55deg, #667eea, #764ba2, red, orange, yellow, green, blue, indigo, violet, black, white);
+}
+
+/* Header Styles */
+.policy-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.policy-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="500" cy="500" r="400" fill="url(%23a)"/></svg>');
+    opacity: 0.3;
+}
+
+.policy-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-out;
+}
+
+.policy-subtitle {
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 30px;
+    font-style: italic;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.policy-last-updated {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.15);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.policy-last-updated i {
+    color: #667eea;
+}
+
+/* Container */
+.home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Section Styles */
+.policy-section {
+    margin: 60px 0;
+    background: white;
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.policy-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.section-title {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    color: #333;
+    margin-bottom: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+}
+
+/* Introduction Section */
+.policy-intro {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    color: #666;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Policy Content */
+.policy-content {
+    margin-top: 30px;
+}
+
+.policy-text {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+/* Information Categories */
+.info-category {
+    margin-bottom: 40px;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border-left: 4px solid #667eea;
+}
+
+.info-category h3 {
+    color: #333;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-category h3 i {
+    color: #667eea;
+    font-size: 1.2rem;
+}
+
+.policy-list {
+    list-style: none;
+    padding: 0;
+}
+
+.policy-list li {
+    padding: 12px 0;
+    padding-left: 25px;
+    position: relative;
+    color: #555;
+    line-height: 1.6;
+}
+
+.policy-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #667eea;
+    font-weight: bold;
+}
+
+/* Usage Grid */
+.usage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.usage-item {
+    text-align: center;
+    padding: 30px 20px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.usage-item:hover {
+    transform: translateY(-5px);
+}
+
+.usage-item i {
+    font-size: 2.5rem;
+    color: #667eea;
+    margin-bottom: 20px;
+}
+
+.usage-item h4 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.usage-item p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Sharing Information */
+.sharing-info {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border-left: 4px solid #764ba2;
+}
+
+.sharing-info h3 {
+    color: #333;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sharing-info h3 i {
+    color: #764ba2;
+}
+
+.sharing-info p {
+    color: #555;
+    line-height: 1.7;
+}
+
+/* Security Features */
+.security-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.security-item {
+    text-align: center;
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.security-item:hover {
+    transform: translateY(-3px);
+}
+
+.security-item i {
+    font-size: 2rem;
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.security-item h4 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.security-item p {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Cookie Types */
+.cookie-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.cookie-item {
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border-left: 4px solid #667eea;
+}
+
+.cookie-item h4 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.cookie-item p {
+    color: #666;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.cookie-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 25px;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.cookie-notice i {
+    color: #856404;
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.cookie-notice p {
+    color: #856404;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Rights Grid */
+.rights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.right-item {
+    text-align: center;
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.right-item:hover {
+    transform: translateY(-3px);
+}
+
+.right-item i {
+    font-size: 2rem;
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+.right-item h4 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.right-item p {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Contact Information */
+.contact-info {
+    margin-top: 30px;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.contact-info h4 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+}
+
+.contact-info p {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.contact-info i {
+    color: #667eea;
+    width: 20px;
+    text-align: center;
+}
+
+/* Contact Card */
+.contact-card {
+    text-align: center;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border-left: 4px solid #667eea;
+}
+
+.contact-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    text-align: left;
+}
+
+.contact-item i {
+    color: #667eea;
+    font-size: 1.2rem;
+    margin-top: 2px;
+}
+
+.contact-item div {
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Retention Information */
+.retention-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.retention-item {
+    padding: 25px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border-left: 4px solid #764ba2;
+}
+
+.retention-item h4 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.retention-item p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* CTA Section */
+.policy-cta {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 20px;
+    text-align: center;
+    margin: 60px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.policy-cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23ffffff" opacity="0.1"/></svg>');
+    animation: float 20s linear infinite;
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+}
+
+.policy-cta h3 {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    margin-bottom: 15px;
+    color: white;
+}
+
+.policy-cta p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.policy-cta .cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background: white;
+    color: #667eea;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.policy-cta .cta-button:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0% { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(-100px) translateY(-100px); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .home-container {
+        padding: 30px 15px;
+    }
+
+    .policy-section {
+        padding: 30px 20px;
+        margin: 40px 0;
+    }
+
+    .usage-grid,
+    .security-features,
+    .cookie-types,
+    .rights-grid,
+    .retention-info,
+    .contact-details {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .info-category,
+    .sharing-info,
+    .cookie-item,
+    .retention-item {
+        padding: 20px;
+    }
+
+    .policy-cta {
+        padding: 40px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .policy-header {
+        padding: 40px 0;
+    }
+
+    .policy-title {
+        font-size: 2.5rem;
+    }
+
+    .policy-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+
+    .policy-section {
+        background: #2d2d2d;
+        color: #e0e0e0;
+    }
+
+    .info-category,
+    .sharing-info,
+    .cookie-item,
+    .retention-item,
+    .contact-info,
+    .contact-card {
+        background: #3a3a3a;
+        color: #e0e0e0;
+    }
+
+    .policy-text,
+    .intro-text {
+        color: #b0b0b0;
+    }
+
+    .cookie-notice {
+        background: #3a3a1a;
+        border-color: #5a5a1a;
+    }
+
+    .cookie-notice p {
+        color: #b0b0b0;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .policy-header,
+    .policy-cta,
+    .footer {
+        background: none;
+        color: black ;
+    }
+
+    .policy-section {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+
+    .back-to-top {
+        display: none !important;
+    }
+}

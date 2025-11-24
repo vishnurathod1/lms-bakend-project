@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Class</title>
+    <link rel="stylesheet" href="live_class.css">
+</head>
+<body>
+   
+    <div class="class">
+        <h1>Live Class</h1>
+        <p>Join the live lecture session.</p>
+        <div id="live-video">
+            <!-- Placeholder for live video stream -->
+            <video controls width="600" id="liveVideoPlayer">
+                <source src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4" type="video/mp4">
+                <p>Your browser does not support the video tag. <a href="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4">Download the video</a> instead.</p>
+            </video>
+            <div id="videoError" style="display: none; color: red; margin-top: 10px;">
+                <p>⚠️ Video stream not available. This could be due to:</p>
+                <ul>
+                    <li>No active live session currently running</li>
+                    <li>Network connectivity issues</li>
+                    <li>Live streaming server not configured</li>
+                </ul>
+                <p>Please check back later or contact your administrator.</p>
+                <p><a href="sample_video.html" target="_blank">Test video functionality here</a></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function checkEnrollment() {
+            const enrolled = localStorage.getItem('enrolledCourses');
+            const enrolledCourses = enrolled ? JSON.parse(enrolled) : [];
+            const videoContainer = document.getElementById('live-video');
+            if (enrolledCourses.length === 0) {
+                videoContainer.innerHTML = '<p>You need to enroll in a course to access live classes. <a href="courses_list.html">Enroll now</a></p>';
+            }
+        }
+        // Check on page load
+        checkEnrollment();
+
+        // Handle video loading errors
+        const videoPlayer = document.getElementById('liveVideoPlayer');
+        const videoError = document.getElementById('videoError');
+
+        if (videoPlayer) {
+            videoPlayer.addEventListener('error', function() {
+                console.log('Video failed to load');
+                videoError.style.display = 'block';
+                videoPlayer.style.display = 'none';
+            });
+
+            videoPlayer.addEventListener('loadstart', function() {
+                console.log('Video loading started');
+                videoError.style.display = 'none';
+                videoPlayer.style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>

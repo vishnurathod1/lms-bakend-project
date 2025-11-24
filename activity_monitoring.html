@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Activity Monitoring</title>
+    <link rel="stylesheet" href="activity_monitoring.css" />
+</head>
+<body class="activity-monitoring-page">
+    <main class="activity-monitoring-main">
+        <h1>Activity Monitoring</h1>
+        <section>
+            <h2>Student Activities</h2>
+            <ul id="student-activities-list">
+                <!-- Student activities will be dynamically loaded here -->
+            </ul>
+        </section>
+        <section>
+            <h2>Trainer Activities</h2>
+            <ul id="trainer-activities-list">
+                <!-- Trainer activities will be dynamically loaded here -->
+            </ul>
+        </section>
+    </main>
+    <script>
+        // Sample simulated activity data
+        const studentActivities = [
+            { id: 1, user: 'Student Anil', activity: 'Logged in', timestamp: '2024-06-01T09:00:00' },
+            { id: 2, user: 'Student Amol', activity: 'Completed Course: Math 101', timestamp: '2024-06-01T10:15:00' },
+            { id: 3, user: 'Student Omkar', activity: 'Viewed Lecture: History', timestamp: '2024-06-01T11:30:00' },
+            { id: 4, user: 'Student Charan', activity: 'Submitted Assignment: Science Project', timestamp: '2024-06-01T12:00:00' },
+            { id: 5, user: 'Student Rahul', activity: 'Participated in Forum Discussion', timestamp: '2024-06-01T13:45:00' },
+            { id: 6, user: 'Student Ramesh', activity: 'Logged out', timestamp: '2024-06-01T14:00:00' },
+            { id: 7, user: 'Student Suresh', activity: 'Enrolled in Course: Physics 101', timestamp: '2024-06-01T15:30:00' }
+        ];
+
+        const trainerActivities = [
+            { id: 1, user: 'Trainer Ram', activity: 'Logged in', timestamp: '2024-06-01T08:45:00' },
+            { id: 2, user: 'Trainer Vishnu', activity: 'Uploaded Course Material', timestamp: '2024-06-01T09:30:00' },
+            { id: 3, user: 'Trainer Sunita', activity: 'Scheduled Session', timestamp: '2024-06-01T10:00:00' },
+            { id: 4, user: 'Trainer Meena', activity: 'Reviewed Student Submissions', timestamp: '2024-06-01T11:15:00' },
+            { id: 5, user: 'Trainer Anjali', activity: 'Conducted Live Class', timestamp: '2024-06-01T12:30:00' },
+            { id: 6, user: 'Trainer Kavita', activity: 'Provided Feedback to Students', timestamp: '2024-06-01T13:00:00' },
+            { id: 7, user: 'Trainer Priya', activity: 'Logged out', timestamp: '2024-06-01T14:15:00' }
+        ];
+
+        function formatTimestamp(ts) {
+            const date = new Date(ts);
+            return date.toLocaleString();
+        }
+
+        function loadActivities() {
+            const studentList = document.getElementById('student-activities-list');
+            studentList.innerHTML = '';
+            studentActivities.forEach(act => {
+                const li = document.createElement('li');
+                li.textContent = `${formatTimestamp(act.timestamp)} - ${act.user}: ${act.activity}`;
+                studentList.appendChild(li);
+            });
+
+            const trainerList = document.getElementById('trainer-activities-list');
+            trainerList.innerHTML = '';
+            trainerActivities.forEach(act => {
+                const li = document.createElement('li');
+                li.textContent = `${formatTimestamp(act.timestamp)} - ${act.user}: ${act.activity}`;
+                trainerList.appendChild(li);
+            });
+        }
+
+        // Load activities on page load
+        loadActivities();
+    </script>
+</body>
+</html>

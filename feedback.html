@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student and Trainer Feedback</title>
+    <link rel="stylesheet" href="feedback.css" />
+    
+</head>
+
+<body class="feedback-page">
+    <main class="feedback-main">
+        <h1>Student and Trainer Feedback</h1>
+        <form id="feedback-form">
+            <div class="form-group">
+                <label for="user-type">User Type:</label>
+                <select id="user-type" required>
+                    <option value="">Select User Type</option>
+                    <option value="Student">Student</option>
+                    <option value="Trainer">Trainer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="feedback-text">Feedback:</label>
+                <textarea id="feedback-text" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Submit Feedback</button>
+        </form>
+        <section class="submitted-feedback">
+            <h2>Submitted Feedback</h2>
+            <ul id="feedback-list"></ul>
+        </section>
+    </main>
+    <script>
+        function getFeedback() {
+            const feedback = localStorage.getItem('feedback');
+            return feedback ? JSON.parse(feedback) : [];
+        }
+
+        function saveFeedback(feedback) {
+            localStorage.setItem('feedback', JSON.stringify(feedback));
+        }
+
+        function loadFeedback() {
+            const feedbackList = document.getElementById('feedback-list');
+            const feedback = getFeedback();
+            feedbackList.innerHTML = '';
+            feedback.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${item.userType}</strong>: ${item.text}`;
+                feedbackList.appendChild(li);
+            });
+        }
+
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userType = document.getElementById('user-type').value;
+            const text = document.getElementById('feedback-text').value.trim();
+            if (userType && text) {
+                const feedback = getFeedback();
+                feedback.push({ userType, text });
+                saveFeedback(feedback);
+                loadFeedback();
+                this.reset();
+                alert('Feedback submitted successfully!');
+            }
+        });
+
+        // Load feedback on page load
+        loadFeedback();
+    </script>
+</body>
+</html>

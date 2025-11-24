@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Home</title>
+    <link rel="stylesheet" href="student_home.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    
+</head>
+<body>
+  <div class="vishnu">
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="home.html" class="navbar-brand">📚 LMS Project</a>
+        <ul class="navbar-menu">
+          <div class="search-bar">
+            <input type="text" id="searchInput"placeholder="Search features..."onkeyup="filterFeatures()"/>
+
+          </div>
+          <li class="navbar-item">
+            <a href="home.html" class="navbar-link"
+              ><i class="fas fa-home"></i> Home</a
+            >
+          </li>
+          <li class="navbar-item">
+            <a href="student_home.html" class="navbar-link"
+              ><i class="fas fa-graduation-cap"></i> Student</a
+            >
+          </li>
+          <li class="navbar-item profile-display" id="profileDisplay" style="display: none;">
+            <a href="student_profile.html" class="navbar-link"
+              ><i class="fas fa-user-circle"></i> <span id="userName"></span> (<span id="userRole"></span>)</a
+            >
+          </li>
+          <li class="navbar-item">
+            <a href="login.html" class="navbar-link"
+              ><i class="fas fa-sign-out-alt"></i> Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <aside class="sidebar">
+    <ul class="featuresList">
+      <li>
+        <a href="student_dash.html"
+          ><i class="fas fa-chart-bar"></i>Student Dashboard</a
+        >
+      </li>
+      <li>
+        <a href="courses_list.html"><i class="fa-sharp-duotone fa-regular fa-book"></i>View courses</a>
+      </li>
+      <li>
+        <a href="view_report.html"><i class="fas fa-file-alt"></i> View Reports</a>
+      </li>
+      <li>
+        <a href="student_assignments.html"
+          ><i class="fas fa-tasks"></i> Assignments</a
+        >
+      </li>
+      <li>
+        <a href="student_attendance.html"
+          ><i class="fas fa-calendar-check"></i> Attendance</a
+        >
+      </li>
+      <li>
+        <a href="student_grades.html"><i class="fas fa-graduation-cap"></i> Grades</a>
+      </li>
+      <li>
+        <a href="performance_metrics.html"
+          ><i class="fas fa-trophy"></i> Performance Metrics</a
+        >
+      </li>
+      <li>
+        <a href="student_compliance.html"
+          ><i class="fas fa-check-circle"></i> Compliance</a
+        >
+      </li>
+      <li>
+        <a href="student_system_updates.html"
+          ><i class="fas fa-sync-alt"></i> System Updates</a
+        >
+      </li>
+      <li>
+        <a href="recorede.html"
+          ><i class="fas fa-sync-alt"></i> Recorede class</a
+        >
+      </li>
+      <li>
+        <a href="live_class.html"
+          ><i class="fas fa-sync-alt"></i> Live Class</a
+        >
+      </li>
+
+      <li>
+        <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
+      </li>
+      <li>
+        <a href="unenroll.html"><i class="fas fa-times-circle"></i> Unenroll Courses</a>
+      </li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <section class="content-display">
+      <div
+        id="featureContent"
+        style="
+          margin-top: 20px;
+          padding: 20px;
+          border: 1px solid #ddd;
+          background-color: #f9f9f9;
+          display: none;
+        "
+      >
+        <h3 id="contentTitle">Selected Feature Content</h3>
+        <div id="contentArea"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function filterFeatures() {
+      const input = document.getElementById("searchInput");
+      const filter = input.value.toLowerCase();
+      const lists = document.querySelectorAll(".featuresList");
+      lists.forEach((ul) => {
+        const li = ul.getElementsByTagName("li");
+        for (let i = 0; i < li.length; i++) {
+          const a = li[i].getElementsByTagName("a")[0];
+          const textValue = a.textContent || a.innerText;
+          if (textValue.toLowerCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+          } else {
+            li[i].style.display = "none";
+          }
+        }
+      });
+    }
+
+    function loadFeatureContent(title, url) {
+      const contentDiv = document.getElementById("featureContent");
+      const contentTitle = document.getElementById("contentTitle");
+      const contentArea = document.getElementById("contentArea");
+
+      contentTitle.textContent = title;
+      contentArea.innerHTML = `<iframe src="${url}" width="100%" height="600px" frameborder="0"></iframe>`;
+      contentDiv.style.display = "block";
+
+      // Scroll to the content
+      contentDiv.scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const links = document.querySelectorAll(".featuresList a");
+      if (links) {
+        links.forEach((link) => {
+          link.addEventListener("click", function (event) {
+            event.preventDefault();
+            const title = this.textContent;
+            const url = this.getAttribute("href");
+            loadFeatureContent(title, url);
+          });
+        });
+      }
+
+      // Display user profile if logged in
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (currentUser) {
+        const userName = document.getElementById('userName');
+        const userRole = document.getElementById('userRole');
+        userName.textContent = currentUser.name;
+        userRole.textContent = currentUser.role;
+
+        // Show profile display in navbar
+        const profileDisplay = document.getElementById('profileDisplay');
+        profileDisplay.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
+
+        

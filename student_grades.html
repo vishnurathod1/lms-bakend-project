@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Grades</title>
+    <link rel="stylesheet" href="student_grades.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .grades-container {
+        margin: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+</head>
+<body>
+    <div class="class">
+        <h1>Your Grades</h1>
+        <p>View your performance in enrolled courses.</p>
+        <br>
+        <div class="grades-container">
+            <table class="grades-table" id="gradesTable">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Course</th>
+                        <th>Assignment</th>
+                        <th>Grade</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Grades will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+      function loadGrades() {
+        const grades = JSON.parse(localStorage.getItem('grades')) || [];
+        const tbody = document.getElementById('gradesTable').getElementsByTagName('tbody')[0];
+        tbody.innerHTML = '';
+        grades.forEach((grade) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${grade.studentName}</td>
+            <td>${grade.course}</td>
+            <td>${grade.assignment}</td>
+            <td>${grade.grade}</td>
+            <td>${grade.date}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      }
+      document.addEventListener('DOMContentLoaded', loadGrades);
+    </script>
+</body>
+</html>

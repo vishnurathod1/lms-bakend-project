@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Add New User</title>
+    <link rel="stylesheet" href="styles.css" />
+    
+</head>
+<body class="add-user-page">
+
+    <main class="container">
+        <h1>Add New User</h1>
+        <form id="add-user-form">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required />
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required />
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" required>
+                    <option value="Student">Student</option>
+                    <option value="Trainer">Trainer</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="phone">Mobile No:</label>
+                <input type="text" id="phone" />
+            </div>
+            <button type="submit" class="submit-btn">Add User</button>
+            <button type="button" id="cancel-btn" class="submit-btn">Cancel</button>
+        </form>
+    </main>
+    <script>
+        function getUsers() {
+            const users = localStorage.getItem('users');
+            return users ? JSON.parse(users) : [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        document.getElementById('add-user-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const role = document.getElementById('role').value;
+            const status = document.getElementById('status').value;
+            const phone = document.getElementById('phone').value.trim();
+
+            if (!name || !email) {
+                alert('Name and Email are required.');
+                return;
+            }
+
+            const users = getUsers();
+            users.push({ name, email, role, status, phone });
+            saveUsers(users);
+            alert('User added successfully!');
+            window.location.href = 'manage_users.html';
+        });
+
+        document.getElementById('cancel-btn').addEventListener('click', function() {
+            window.location.href = 'manage_users.html';
+        });
+    </script>
+</body>
+</html>
+

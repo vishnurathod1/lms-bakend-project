@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Attendance for Python Students</title>
+    <link rel="stylesheet" href="attendance.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+
+    <div class="container">
+        <h1>Add Attendance for Python Students</h1>
+
+        <div class="form-section">
+            <h2>Add Attendance</h2>
+            <form id="attendanceForm">
+                <label for="userType">User Type:</label>
+                <select id="userType" required>
+                    <option value="student" selected>Student</option>
+                </select>
+
+                <label for="userName">User Name:</label>
+                <input type="text" id="userName" required>
+
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" required value="Python">
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" required>
+
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" required>
+
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime" required>
+
+                <button type="submit">Add Attendance</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to calculate hours between start and end time
+        function calculateHours(startTime, endTime) {
+            if (!startTime || !endTime) return 0;
+            const start = new Date(`1970-01-01T${startTime}:00`);
+            const end = new Date(`1970-01-01T${endTime}:00`);
+            const diffMs = end - start;
+            const diffHours = diffMs / (1000 * 60 * 60);
+            return diffHours > 0 ? diffHours : 0; // Ensure non-negative
+        }
+
+        // Add new attendance record
+        document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userType = document.getElementById('userType').value;
+            const userName = document.getElementById('userName').value;
+            const subject = document.getElementById('subject').value;
+            const date = document.getElementById('date').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            const hours = calculateHours(startTime, endTime);
+            let status;
+            if (hours >= 8) {
+                status = 'Present';
+            } else if (hours >= 4) {
+                status = 'half day';
+            } else {
+                status = 'absent';
+            }
+
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            attendance.push({ userType, userName, subject, date, startTime, endTime, hours: hours.toFixed(2), status });
+            localStorage.setItem('attendance', JSON.stringify(attendance));
+
+            alert('Attendance added successfully!');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

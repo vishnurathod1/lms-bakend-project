@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trainer Profile</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f4f4f4;
+        }
+        .profile-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-header i {
+            font-size: 80px;
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+        .profile-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #333;
+        }
+        .profile-details {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #764ba2;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <i class="fa fa-user-circle"></i>
+            <h1>Trainer Profile</h1>
+        </div>
+        <div class="profile-details">
+            <p><strong>Name:</strong> <span id="profileName">Trainer User</span></p>
+            <p><strong>Email:</strong> <span id="profileEmail">trainer@example.com</span></p>
+            <p><strong>Role:</strong> <span id="profile">Trainer</span></p>
+            <p><strong>Member since:</strong> <span id="profileMemberSince">January 2025</span></p>
+        </div>
+    
+    </div>
+
+    <script>
+        // Load user profile data from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.getElementById('profileName').textContent = currentUser.name || 'Trainer User';
+                document.getElementById('profileEmail').textContent = currentUser.email || 'trainer@example.com';
+                document.getElementById('profileRole').textContent = currentUser.role || 'Trainer';
+                document.getElementById('profileMemberSince').textContent = currentUser.memberSince || 'January 2025';
+            }
+        });
+    </script>
+</body>
+</html>

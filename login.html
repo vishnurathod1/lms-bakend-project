@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="log_reg.css">
+    <style>
+    label[ for=admin],
+    label[ for=email],
+    label[ for=name],
+    label[ for=email],
+    label[ for=password],
+    label[ for=trainer],
+    label[ for=Student],
+    label[ for=fullName],
+    label[ for=password] {
+        color: black;
+    }
+    h1 {
+        color: black;
+    }
+
+    .forgot-link p,
+    a {
+        color: black;
+    }
+
+    .register-link p,
+    a {
+        color: black;
+
+    }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img src="https://img.icons8.com/ios-filled/50/000000/graduation-cap.png" alt="Graduation Cap" class="edu-icon">
+            <img src="https://img.icons8.com/ios-filled/50/000000/book.png" alt="Book" class="edu-icon">
+            <img src="https://img.icons8.com/ios-filled/50/000000/light-on.png" alt="Lightbulb" class="edu-icon">
+        </div>
+        <h1>User Login</h1>
+        <form id="loginForm" action="#" method="post">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required />
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label>User Type:</label>
+                <div class="radio-group">
+                    <input type="radio" id="admin" name="userType" value="admin" required>
+                    <label for="admin">Admin</label>
+
+                    <input type="radio" id="trainer" name="userType" value="trainer">
+                    <label for="trainer">Trainer</label>
+
+                    <input type="radio" id="Student" name="userType" value="trainee">
+                    <label for="Student">Student</label>
+                </div>
+            </div>
+
+            <div class="form-group" id="subjectGroup" style="display: none;">
+                <label for="subject">Subject:</label>
+                <select id="subject" name="subject">
+                    <option value="">Select Subject</option>
+                    <option value="js">JavaScript</option>
+                    <option value="css">CSS</option>
+                    <option value="html">HTML</option>
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="other">Other</option>
+
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">Login</button>
+        </form>
+        <p class="register-link">Don't have an account? <a href="registration.html">Register here</a></p>
+        <p class="forgot-link">Don't have forget password? <a href="forgot.html">forgot here</a></p>
+    </div>
+
+    <script>
+    function getUsers() {
+        const users = localStorage.getItem('users');
+        return users ? JSON.parse(users) : [];
+    }
+
+    function saveUsers(users) {
+        localStorage.setItem('users', JSON.stringify(users));
+    }
+
+    // Show/hide subject field based on user type
+    document.querySelectorAll('input[name="userType"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const subjectGroup = document.getElementById('subjectGroup');
+            if (e.target.value === 'trainer') {
+                subjectGroup.style.display = 'block';
+            } else {
+                subjectGroup.style.display = 'none';
+            }
+        });
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const userType = document.querySelector('input[name="userType"]:checked').value;
+        const subject = document.getElementById('subject').value;
+
+        if (!name || !email) {
+            alert('Name and Email are required.');
+            return;
+        }
+
+        if (userType === 'trainer' && !subject) {
+            alert('Please select a subject for trainers.');
+            return;
+        }
+
+        let users = getUsers();
+        const existingUser = users.find(user => user.email.toLowerCase() === email.toLowerCase());
+
+        if (!existingUser) {
+            // Add new user automatically
+            let role;
+            if (userType === 'admin') {
+                role = 'Admin';
+            } else if (userType === 'trainer') {
+                role = 'Trainer';
+            } else if (userType === 'trainee') {
+                role = 'Student';
+            }
+            const newUser = {
+                name,
+                email,
+                role: role,
+                subject: subject,
+                status: 'Active'
+            };
+            users.push(newUser);
+            saveUsers(users);
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            alert('New user added successfully!');
+        } else {
+            localStorage.setItem('currentUser', JSON.stringify(existingUser));
+        }
+
+        // Redirect based on user type and subject
+        if (userType === 'admin') {
+            window.location.href = 'admin_home.html';
+        } else if (userType === 'trainer') {
+            if (subject === 'js') {
+                window.location.href = 'js_trainer.html';
+            } else if (subject === 'css') {
+                window.location.href = 'css_trainer.html';
+            } else if (subject === 'java') {
+                window.location.href = 'java.html';
+            } else if (subject === 'Python') {
+                window.location.href = 'Python.html';
+            } else {
+                window.location.href = 'subject_trainer.html';
+            }
+        } else if (userType === 'trainee') {
+            window.location.href = 'student_home.html';
+        }
+    });
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    </script>
+    <!-- <php>
+        $con =mysqli_connect('localhost','root','Vishnu@123','Registration');
+        if(isset($_post['sub']))
+        {
+        $Name=$_post['name'];
+        $Email=$_post['email'];
+        $Password=$_post['password'];
+        $ram = "INSERT INTO Registration(Name,Email,Password)values('$Name','$email',$Password)";
+        $execute= mysqli_query($con,$ram);
+        }
+
+
+
+
+    </php> -->
+
+
+</body>
+
+</html>

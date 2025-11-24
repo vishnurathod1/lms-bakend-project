@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Assignments</title>
+    <link rel="stylesheet" href="student_assignments.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="student_home.html" class="navbar-brand">📚 LMS Project</a>
+            <ul class="navbar-menu">
+                <li class="navbar-item"><a href="student_home.html" class="navbar-link"><i class="fas fa-home"></i> Home</a></li>
+                <li class="navbar-item"><a href="student_assignments.html" class="navbar-link active"><i class="fas fa-tasks"></i> Assignments</a></li>
+                <li class="navbar-item"><a href="login.html" class="navbar-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main class="content">
+        <h1>Assignments</h1>
+        <div class="assignments-list">
+            <!-- Assignments will be dynamically added here -->
+        </div>
+    </main>
+    <script>
+        function getAssignments() {
+            const assignments = localStorage.getItem('assignments');
+            return assignments ? JSON.parse(assignments) : [];
+        }
+
+        function renderAssignments() {
+            const assignments = getAssignments();
+            const container = document.querySelector('.assignments-list');
+            container.innerHTML = '';
+
+            if (assignments.length === 0) {
+                container.innerHTML = '<p>No assignments available at the moment.</p>';
+                return;
+            }
+
+            assignments.forEach((assignment, index) => {
+                const div = document.createElement('div');
+                div.classList.add('assignment-item');
+                div.innerHTML = `
+                    <h3>${assignment.title}</h3>
+                    <p>${assignment.description}</p>
+                    <p><strong>Course:</strong> ${assignment.course}</p>
+                    <p><strong>Due Date:</strong> ${assignment.dueDate}</p>
+                    <p><strong>Status:</strong> ${assignment.status}</p>
+                    <button class="delete-btn" data-index="${index}">Delete</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteAssignment(index) {
+            const assignments = getAssignments();
+            assignments.splice(index, 1);
+            localStorage.setItem('assignments', JSON.stringify(assignments));
+            renderAssignments();
+        }
+
+        // Initial render
+        renderAssignments();
+        
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('delete-btn')) {
+                const index = event.target.getAttribute('data-index');
+                deleteAssignment(index);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student System Updates</title>
+    <link rel="stylesheet" href="system_updates.css" />
+</head>
+<body>
+    <main class="updates-main">
+        <h1>Student System Updates</h1>
+        <div id="updatesList" class="updates-list">
+            <!-- Updates will be loaded here -->
+        </div>
+        
+    </main>
+    <script>
+        function loadUpdates() {
+            const updatesList = document.getElementById('updatesList');
+            const updates = JSON.parse(localStorage.getItem('systemUpdates')) || [];
+            const filteredUpdates = updates.filter(update => update.audience === 'student' || update.audience === 'all');
+            if (filteredUpdates.length === 0) {
+                updatesList.innerHTML = '<p>No system updates available.</p>';
+                return;
+            }
+            updatesList.innerHTML = '';
+            filteredUpdates.forEach(update => {
+                const updateDiv = document.createElement('div');
+                updateDiv.classList.add('update-card');
+                updateDiv.innerHTML = `
+                    <h3>${update.title}</h3>
+                    <p>${update.content}</p>
+                    <p><em>${new Date(update.date).toLocaleString()}</em></p>
+                    <hr>
+                `;
+                updatesList.appendChild(updateDiv);
+            });
+        }
+        window.onload = loadUpdates;
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>System Settings</title>
+        <link rel="stylesheet" href="system.setting.css" />
+    </head>
+<body class="system-settings-page">
+    <main class="system-settings-main">
+        <h1>System Settings</h1>
+        <form id="settings-form">
+            <div class="form-group">
+                <label for="site-title">Site Title:</label>
+                <input type="text" id="site-title" placeholder="LMS Project" />
+            </div>
+            <div class="form-group">
+                <label for="default-language">Default Language:</label>
+                <select id="default-language">
+                    <option value="English">English</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="French">French</option>
+                    <option value="German">German</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="theme">Theme:</label>
+                <select id="theme">
+                    <option value="Light">Light</option>
+                    <option value="Dark">Dark</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Notifications:</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="email-notifications" />
+                    <label for="email-notifications">Enable Email Notifications</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="push-notifications" />
+                    <label for="push-notifications">Enable Push Notifications</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password-min-length">Password Minimum Length:</label>
+                <input type="number" id="password-min-length" min="6" max="20" value="8" />
+            </div>
+            <div class="form-group">
+                <label for="session-timeout">Session Timeout (minutes):</label>
+                <input type="number" id="session-timeout" min="5" max="480" value="60" />
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="maintenance-mode" />
+                <label for="maintenance-mode">Enable Maintenance Mode</label>
+            </div>
+            <button type="submit" class="submit-btn">Save Settings</button>
+        </form>
+    </main>
+    <script>
+        function getSettings() {
+            const settings = localStorage.getItem('systemSettings');
+            return settings ? JSON.parse(settings) : {
+                siteTitle: 'LMS Project',
+                defaultLanguage: 'English',
+                theme: 'Light',
+                emailNotifications: false,
+                pushNotifications: false,
+                passwordMinLength: 8,
+                sessionTimeout: 60,
+                maintenanceMode: false
+            };
+        }
+
+        function saveSettings(settings) {
+            localStorage.setItem('systemSettings', JSON.stringify(settings));
+        }
+
+        function loadSettings() {
+            const settings = getSettings();
+            document.getElementById('site-title').value = settings.siteTitle;
+            document.getElementById('default-language').value = settings.defaultLanguage;
+            document.getElementById('theme').value = settings.theme;
+            document.getElementById('email-notifications').checked = settings.emailNotifications;
+            document.getElementById('push-notifications').checked = settings.pushNotifications;
+            document.getElementById('password-min-length').value = settings.passwordMinLength;
+            document.getElementById('session-timeout').value = settings.sessionTimeout;
+            document.getElementById('maintenance-mode').checked = settings.maintenanceMode;
+        }
+
+        document.getElementById('settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const settings = {
+                siteTitle: document.getElementById('site-title').value.trim(),
+                defaultLanguage: document.getElementById('default-language').value,
+                theme: document.getElementById('theme').value,
+                emailNotifications: document.getElementById('email-notifications').checked,
+                pushNotifications: document.getElementById('push-notifications').checked,
+                passwordMinLength: parseInt(document.getElementById('password-min-length').value),
+                sessionTimeout: parseInt(document.getElementById('session-timeout').value),
+                maintenanceMode: document.getElementById('maintenance-mode').checked
+            };
+            saveSettings(settings);
+            alert('Settings saved successfully!');
+        });
+
+        // Load settings on page load
+        loadSettings();
+    </script>
+</body>
+</html>

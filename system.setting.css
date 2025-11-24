@@ -1,0 +1,206 @@
+/* Styles for system settings page */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+   
+ background: linear-gradient(135deg, #e7e9f1 0%, #cfbae4 100%);
+    display: flex;
+     justify-content: left;
+    align-items: left; 
+    padding: 10px;
+}
+
+.container {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+}
+.class{
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width:10000px;
+    height:1000px;
+
+}
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 2.5em;
+    font-weight: 300;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 5px;
+}
+
+.radio-group label {
+    display: inline;
+    margin-right: 15px;
+    cursor: pointer;
+    color: #555;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #e71d27 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.navbar {
+    background-color: #333;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.navbar-brand {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+t
+
+
+.navbar-link:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+.navbar-link.active {
+    background-color: #667eea;
+    border-radius: 5px;
+}
+.system-settings-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f4f6f8;
+    padding: 20px;
+}
+
+.system-settings-main {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 0 ;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+} 
+
+ .system-settings-main h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 9px;
+    display: block;
+    color: #555;
+} 
+
+.checkbox-group {
+    margin-bottom: 15px;
+}
+
+.checkbox-group label {
+    font-weight: normal;
+    color: #555;
+}
+#email-notifications{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color:black;
+    
+}
+#privacy-settings{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color:black;
+    
+}

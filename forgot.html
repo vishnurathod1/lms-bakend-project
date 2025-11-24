@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link rel="stylesheet" href="log_reg.css">
+    <style>
+    label[for=email] {
+        color: black;
+    }
+
+    h1 {
+        color: black;
+    }
+
+    .back-link p,
+    a {
+        color: black;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img src="https://img.icons8.com/ios-filled/50/000000/key.png" alt="Key" class="edu-icon">
+        </div>
+        <h1>Forgot Password</h1>
+
+        <div id="step1">
+            <form id="emailForm" action="#" method="post">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <button type="submit" class="submit-btn">Send OTP</button>
+            </form>
+        </div>
+
+        <div id="step2" style="display: none;">
+            <form id="otpForm" action="#" method="post">
+                <div class="form-group">
+                    <label for="otp">Enter OTP:</label>
+                    <input type="text" id="otp" name="otp" required maxlength="6">
+                </div>
+                <button type="submit" class="submit-btn">Verify OTP</button>
+            </form>
+        </div>
+
+        <div id="step3" style="display: none;">
+            <form id="passwordForm" action="#" method="post">
+                <div class="form-group">
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+                <button type="submit" class="submit-btn">Reset Password</button>
+            </form>
+        </div>
+
+        <p class="back-link">Remember your password? <a href="login.html">Back to Login</a></p>
+    </div>
+
+    <script>
+    let generatedOTP = '';
+
+    // Step 1: Send OTP
+    document.getElementById('emailForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+
+        if (!email) {
+            alert('Please enter your email.');
+            return;
+        }
+
+        // Generate random 6-digit OTP
+        generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Simulate sending OTP (display for testing)
+        alert(`OTP sent to your email: ${generatedOTP}`);
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = 'block';
+    });
+
+    // Step 2: Verify OTP
+    document.getElementById('otpForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const otp = document.getElementById('otp').value.trim();
+
+        if (!otp || otp.length !== 6) {
+            alert('Please enter a valid 6-digit OTP.');
+            return;
+        }
+
+        if (otp !== generatedOTP) {
+            alert('Invalid OTP. Please try again.');
+            return;
+        }
+
+        // OTP verified
+        alert('OTP verified.');
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('step3').style.display = 'block';
+    });
+
+    // Step 3: Reset Password
+    document.getElementById('passwordForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (!newPassword || newPassword.length < 6) {
+            alert('Password must be at least 6 characters.');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            alert('Passwords do not match.');
+            return;
+        }
+
+        // Simulate password reset
+        alert('Password reset successfully.');
+        window.location.href = 'login.html';
+    });
+    </script>
+</body>
+
+</html>

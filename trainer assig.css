@@ -1,0 +1,116 @@
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    background:linear-gradient(47deg, rgb(235, 233, 231),white)
+}
+.content{
+    background:linear-gradient(47deg, rgb(240, 239, 238),white);
+    height: 1000px;
+    width: 40%;
+    border: 2px solid black;
+    justify-content: left;
+    text-align: left;
+}
+h1{
+    font-family: 'Arial', sans-serif;
+    font-size: 30px;
+    width: 100%;
+     
+     font-weight: bold;
+}
+#assignment-form{
+        text-decoration: none;
+        margin-left: 20px;
+       
+        justify-content: left;
+        text-align: left;
+}
+.form-group{
+    margin: 50px;
+    color: black;
+    font-size: x-large;
+    
+    
+}
+#title{
+    width: 350px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+   
+}
+label{
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+
+}
+#description{
+    width: 350px;
+    height: 250px;
+    border-radius:10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+#description:hover{
+    background:rgb(245, 230, 207) ;
+}
+label[for="description"],
+label[for="date"],
+label[for="course"]
+{
+    font-size: 25px;
+    font-weight: bold;
+    color: black;
+    justify-content: left;
+    text-align: left;  
+
+}
+label[for="title"]{
+    ont-size: 25px;
+    font-weight: bold;
+    color: white;
+    justify-content: left;
+    text-align: left;  
+}
+#due-date{
+    width: 350px;
+    height: 40px;
+    border-radius: 10px;
+    
+}
+#course{
+    width: 350px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    
+}
+#status{
+    width: 350px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+
+}
+.submit-btn{
+   
+    height: 40px;
+    color: black;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 150px;
+    border: 2px solid black;
+}

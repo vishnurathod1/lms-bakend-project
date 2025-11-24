@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Courses</title>
+    <link rel="stylesheet" href="student_home.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="home.html" class="navbar-brand">LMS Project</a>
+            <ul class="navbar-menu">
+                <li class="navbar-item"><a href="home.html" class="navbar-link">Home</a></li>
+                <li class="navbar-item"><a href="student_home.html" class="navbar-link">Student Home</a></li>
+                <li class="navbar-item"><a href="login.html" class="navbar-link">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="class">
+        <h1>Available Courses</h1>
+        <div id="available-courses">
+            <!-- Available courses will be listed here -->
+        </div>
+        <h1>Enrolled Courses</h1>
+        <div id="enrolled-courses">
+            <!-- Enrolled courses will be listed here -->
+        </div>
+    </div>
+    <script>
+        function getCourses() {
+            const courses = localStorage.getItem('courses');
+            return courses ? JSON.parse(courses) : [];
+        }
+
+        function getEnrolledCourses() {
+            const enrolled = localStorage.getItem('enrolledCourses');
+            return enrolled ? JSON.parse(enrolled) : [];
+        }
+
+        function saveEnrolledCourses(enrolled) {
+            localStorage.setItem('enrolledCourses', JSON.stringify(enrolled));
+        }
+
+        function renderAvailableCourses() {
+            const courses = getCourses();
+            const enrolled = getEnrolledCourses();
+            const enrolledTitles = enrolled.map(c => c.title);
+            const available = courses.filter(c => !enrolledTitles.includes(c.title) && c.status === 'Active');
+            const container = document.getElementById('available-courses');
+            container.innerHTML = '';
+            available.forEach(course => {
+                const div = document.createElement('div');
+                div.className = 'course-item';
+                div.innerHTML = `
+                    <span>${course.title} - ₹${course.price} - Duration: ${course.duration} months</span>
+                    <button class="enroll-btn" data-title="${course.title}">Enroll</button>
+                `;
+                container.appendChild(div);
+            });
+            attachEnrollListeners();
+        }
+
+        function renderEnrolledCourses() {
+            const enrolled = getEnrolledCourses();
+            const container = document.getElementById('enrolled-courses');
+            container.innerHTML = '';
+            enrolled.forEach((course, index) => {
+                const div = document.createElement('div');
+                div.className = 'course-item';
+                div.innerHTML = `
+                    <span>${course.title} - ₹${course.price} - Duration: ${course.duration} months</span>
+                    <button class="unenroll-btn" data-index="${index}">Unenroll</button>
+                `;
+                container.appendChild(div);
+            });
+            attachUnenrollListeners();
+        }
+
+        function attachEnrollListeners() {
+            document.querySelectorAll('.enroll-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const title = e.target.getAttribute('data-title');
+                    enrollCourse(title);
+                });
+            });
+        }
+
+        function attachUnenrollListeners() {
+            document.querySelectorAll('.unenroll-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    unenrollCourse(index);
+                });
+            });
+        }
+
+        function enrollCourse(title) {
+            const courses = getCourses();
+            const course = courses.find(c => c.title === title);
+            if (course) {
+                const enrolled = getEnrolledCourses();
+                enrolled.push(course);
+                saveEnrolledCourses(enrolled);
+                renderAvailableCourses();
+                renderEnrolledCourses();
+            }
+        }
+
+        function unenrollCourse(index) {
+            const enrolled = getEnrolledCourses();
+            enrolled.splice(index, 1);
+            saveEnrolledCourses(enrolled);
+            renderAvailableCourses();
+            renderEnrolledCourses();
+        }
+
+        // Initial render
+        renderAvailableCourses();
+        renderEnrolledCourses();
+    </script>
+</body>
+</html>

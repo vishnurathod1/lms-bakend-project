@@ -1,0 +1,362 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #cad1f1 0%, #e5dcee 100%);
+    min-height: 100vh;
+    color: #333;
+    padding-top: 60px; /* For fixed navbar */
+    display: flex;
+    justify-content: center;
+    border: 3px solid black;
+}
+
+
+
+
+/* Main content */
+.compliance-main {
+    max-width: 1200px;
+    margin: 0px ;
+    padding: 20px;
+    
+    
+}
+
+.compliance-main h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: white;
+    font-size: 2.5em;
+    
+}
+
+/* Trainer Compliance Section */
+.trainer-compliance {
+    background: white;
+    padding-left: 200px;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+}
+
+.trainer-compliance h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 2em;
+}
+
+/* Student Compliance Section */
+.student-compliance {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+}
+
+.student-compliance h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 2em;
+}
+
+/* Compliance Status */
+.compliance-status {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+#complaintsList{
+    background-color: rgb(250, 248, 248);
+    width: 1000px;
+    
+}
+
+.status-card {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+    margin: 10px;
+    position: relative;
+}
+
+.status-card h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.status {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.status.compliant {
+    color: #4CAF50;
+}
+
+.status.pending {
+    color: #FF9800;
+}
+
+.status.warning {
+    color: #FFC107;
+}
+
+.status.acknowledged {
+    color: #4CAF50;
+}
+
+.status.extended {
+    color: #2196F3;
+}
+
+.status-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Compliance Actions */
+.compliance-actions {
+    text-align: center;
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #667eea 0%, #e0dee2 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Compliance container for separate pages */
+.compliance-container {
+   background-color: white;
+    padding:20px;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    height:700px;
+   
+}
+
+.compliance-container h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.compliance-container p {
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Admin complaints styles */
+.complaints-main {
+    max-width: 1200px;
+    margin: 80px auto 20px;
+    padding: 20px;
+}
+
+.complaints-main h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.complaints-list {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.complaint-card {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+.complaint-card h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.complaint-card p {
+    margin-bottom: 5px;
+    color: #666;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .compliance-status {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .status-card {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .action-btn {
+        display: block;
+        margin: 10px 0;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .compliance-container {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .navbar-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-menu {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .navbar-item {
+        margin-left: 0;
+        margin-bottom: 5px;
+    }
+
+    .navbar-link {
+        display: block;
+        padding: 10px;
+    }
+}
+
+.back-link{
+    display: inline-block;
+    justify-self: center;
+    color:black;
+   align-items: center;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: rgb(245, 187, 226);
+    border-radius: 5px;
+   
+
+}
+.back-link:hover{
+    text-decoration:none;
+    color: #ddd;
+    background-color: red;
+}
+
+.resolve-btn {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resolve-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}

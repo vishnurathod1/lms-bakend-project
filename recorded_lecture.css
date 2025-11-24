@@ -1,0 +1,160 @@
+/* Styles for Recorded Lecture Classes page */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.navbar {
+    background-color: #007bff;
+    padding: 10px 20px;
+    color: white;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-item {
+    margin-left: 20px;
+}
+
+.navbar-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.navbar-link:hover {
+    text-decoration: underline;
+}
+
+.recorded-lecture-class-main {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.recorded-lecture-class-list {
+    margin-top: 20px;
+}
+
+.recorded-lecture-class-item {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.class-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.class-header h3 {
+    margin: 0;
+    font-size: 1.25em;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.class-content {
+    margin-top: 15px;
+}
+
+.description {
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.class-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.video-container {
+    margin-top: 15px;
+}
+
+.class-video {
+    width: 100%;
+    max-height: 400px;
+    border-radius: 6px;
+    background-color: black;
+}
+
+.no-video-message {
+    margin-top: 15px;
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.video-error {
+    margin-top: 10px;
+}
+
+.class-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-download, .btn-delete {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.btn-download:hover {
+    background-color: #0056b3;
+}
+
+.btn-delete:hover {
+    background-color: #a71d2a;
+}

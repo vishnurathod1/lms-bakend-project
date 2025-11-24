@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trainer Attendance</title>
+    <link rel="stylesheet" href="attendance.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+ 
+    <div class="container">
+        <h1>Trainer Attendance</h1>
+ 
+        <div class="export-buttons" style="margin-bottom: 10px;">
+            <button onclick="exportToExcel()">Export to Excel</button>
+            <button onclick="exportToPDF()">Export to PDF</button>
+        </div>
+ 
+        <div class="table-section">
+            <h2>Attendance Records</h2>
+            <table id="trainerAttendanceTable">
+                <thead>
+                    <tr>
+                        <th>User Type</th>
+                        <th>User Name</th>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Hours</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Trainer attendance records will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+    <script>
+        // Load trainer attendance records from localStorage
+        function loadTrainerAttendance() {
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            const tbody = document.querySelector('#trainerAttendanceTable tbody');
+            tbody.innerHTML = '';
+ 
+            // Filter for trainers only
+            const trainerRecords = attendance.filter(record => record.userType === 'trainer');
+ 
+            trainerRecords.forEach((record, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.userType}</td>
+                    <td>${record.userName}</td>
+                    <td>${record.date}</td>
+                    <td>${record.startTime || ''}</td>
+                    <td>${record.endTime || ''}</td>
+                    <td>${record.hours || ''}</td>
+                    <td>${record.status}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+ 
+        // Edit record
+        function editRecord(index) {
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            // Filter trainer records
+            const trainerRecords = attendance.filter(record => record.userType === 'trainer');
+            const record = trainerRecords[index];
+ 
+            // Populate attendance.html form for editing (optional: could redirect or handle here)
+            alert('Editing record for ' + record.userName + '. Please use the main attendance page to edit.');
+ 
+            // Alternatively, implement editing here or redirect to attendance.html
+        }
+ 
+        // Delete record
+        function deleteRecord(index) {
+            let attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            // Filter trainer records
+            const trainerRecords = attendance.filter(record => record.userType === 'trainer');
+            const recordToDelete = trainerRecords[index];
+ 
+            // Find index of recordToDelete in full attendance array
+            const fullIndex = attendance.findIndex(
+                rec => rec.userType === recordToDelete.userType &&
+                       rec.userName === recordToDelete.userName &&
+                       rec.date === recordToDelete.date &&
+                       rec.status === recordToDelete.status
+            );
+ 
+            if (fullIndex > -1) {
+                attendance.splice(fullIndex, 1);
+                localStorage.setItem('attendance', JSON.stringify(attendance));
+                loadTrainerAttendance();
+            }
+        }
+ 
+        // Initial load
+        loadTrainerAttendance();
+ 
+        // Listen for localStorage changes to auto-update
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'attendance') {
+                loadTrainerAttendance();
+            }
+        });
+    </script>
+ 
+    <!-- Add SheetJS and jsPDF CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ 
+    <script>
+        function exportToExcel() {
+            const table = document.getElementById('trainerAttendanceTable');
+            const wb = XLSX.utils.table_to_book(table, { sheet: "Trainer Attendance" });
+            XLSX.writeFile(wb, 'trainer_attendance.xlsx');
+        }
+ 
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+ 
+            doc.text("Trainer Attendance", 14, 16);
+            const res = doc.autoTableHtmlToJson(document.getElementById('trainerAttendanceTable'));
+            doc.autoTable({
+                head: [res.columns],
+                body: res.data,
+                startY: 20,
+            });
+            doc.save('trainer_attendance.pdf');
+        }
+    </script>
+</body>
+</html>
+ 
+ 

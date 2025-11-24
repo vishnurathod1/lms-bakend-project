@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trainer Grades</title>
+   
+    <link rel="stylesheet" href="trainer_grades.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+</head>
+<body>
+ 
+
+  <main class="main-content">
+    <h2>Grades Management</h2>
+    <form id="gradeForm">
+      <label for="studentName">Student Name:</label>
+      <input type="text" id="studentName" name="studentName" required />
+
+      <label for="course">Course:</label>
+      <input type="text" id="course" name="course" required />
+
+      <label for="assignment">Assignment:</label>
+      <input type="text" id="assignment" name="assignment" required />
+
+      <label for="grade">Grade:</label>
+      <input type="text" id="grade" name="grade" required />
+
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" required />
+
+      <button type="submit">Add Grade</button>
+    </form>
+
+    <table id="gradesTable">
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Course</th>
+          <th>Assignment</th>
+          <th>Grade</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Grades will be dynamically added here -->
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    const gradeForm = document.getElementById('gradeForm');
+    const gradesTableBody = document.getElementById('gradesTable').querySelector('tbody');
+
+    function loadGrades() {
+      const grades = JSON.parse(localStorage.getItem('grades')) || [];
+      gradesTableBody.innerHTML = '';
+      grades.forEach((grade) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${grade.studentName}</td>
+          <td>${grade.course}</td>
+          <td>${grade.assignment}</td>
+          <td>${grade.grade}</td>
+          <td>${grade.date}</td>
+        `;
+        gradesTableBody.appendChild(row);
+      });
+    }
+
+    gradeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newGrade = {
+        studentName: gradeForm.studentName.value,
+        course: gradeForm.course.value,
+        assignment: gradeForm.assignment.value,
+        grade: gradeForm.grade.value,
+        date: gradeForm.date.value,
+      };
+      const grades = JSON.parse(localStorage.getItem('grades')) || [];
+      grades.push(newGrade);
+      localStorage.setItem('grades', JSON.stringify(grades));
+      loadGrades();
+      gradeForm.reset();
+    });
+
+    // Load grades on page load
+    loadGrades();
+  </script>
+</body>
+</html>

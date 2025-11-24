@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="admin_home.css" />
+    <link
+      rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+       
+</head>
+
+<body class="admin-page">
+    <div class="admin-header">
+        <!-- <h1 class="h11">Wellcome to the Admin Page</h1> -->
+     <nav class="navbar">
+        <div class="navbar-container">
+            <h1 class="head"> LMS Project</h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search features..." onkeyup="filterFeatures()" />
+            </div>
+            <ul class="navbar-menu">
+                <li class="navbar-item"><a href="home.html" class="navbar-link"><i class="fa fa-home"></i> Home</a></li>
+                <li class="navbar-item"><a href="student_home.html" class="navbar-link"><i class="fa fa-user-graduate"></i> Student </a></li>
+                <li class="navbar-item"><a href="trainer_home.html" class="navbar-link"><i class="fa fa-chalkboard-teacher"></i> Trainer</a></li>
+                <li class="navbar-item"><a href="login.html" class="navbar-link"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+                <li class="navbar-item"><a href="security_settings.html" class="navbar-link"><i class="fa fa-shield-alt"></i> Settings</a></li>
+                <li class="navbar-item profile-display" id="profileDisplay" style="display: none;"><a href="admin_profile.html" class="navbar-link"><i class="fa fa-user-circle"></i> <span id="userName"></span> (<span id="userRole"></span>)</a></li>
+                <li class="navbar-item"><a href="notifications.html" class="notification-icon"><i class="fa fa-bell"></i></a></li>
+        </div>
+     </nav>`
+     <br>
+     <hr>
+     <main class="admin-main">
+        <section class="content-display">
+            
+            <div id="featureContent" style="margin-top: 20px; padding: 20px; border: 1px solid #ddd; background-color: #f9f9f9; display: none;">
+                <h3 id="contentTitle">Selected Feature Content</h3>
+                <div id="contentArea"></div>
+            </div>
+        </section>
+           
+            <div class="category-section">
+                <div class="sidebar-profile" id="sidebarProfile" style="display: none; padding: 10px; border-bottom: 1px solid #007bff; margin-bottom: 15px;">
+                    <i class="fa fa-user-circle"></i> <span id="sidebarUserName"></span> (<span id="sidebarUserRole"></span>)
+                </div>
+                <h3><i class="fa fa-cogs"></i> Admin Dashboard</h3s>
+                <ul class="featuresList">
+                   
+                    <li><a href="manage_users.html"><i class="fa fa-users"></i> Manage Users</a></li>
+                    <li><a href="view_report.html"><i class="fa fa-file-alt"></i> View Reports</a></li>
+                    <li><a href="dashboard.html"><i class="fa fa-chart-bar"></i> Dashboard</a></li>
+                    <li><a href="system_settings.html"><i class="fa fa-cogs"></i> System Settings</a></li>
+                    <li><a href="user_roles.html"><i class="fa fa-key"></i> User Roles</a></li>
+                    <li><a href="notifications.html"><i class="fa fa-bell"></i> Notifications</a></li>
+                    <li><a href="activity_monitoring.html"><i class="fa fa-chart-line"></i> Activity Monitoring</a></li>
+                    <li><a href="feedback.html"><i class="fa fa-comments"></i> Feedback</a></li>
+                    <li><a href="security_settings.html"><i class="fa fa-lock"></i> Security Settings</a></li>
+                    <li><a href="performance_metrics.html"><i class="fa fa-trophy"></i>Performance</a></li>
+                    <li><a href="admin_complaints.html"><i class="fa fa-check-circle"></i> Compliance</a></li>
+                    <li><a href="system_updates.html"><i class="fa fa-sync-alt"></i> System Updates</a></li>
+                    <li><a href="contact.html"><i class="fa fa-envelope"></i> Contact</a></li>
+                    <li><a href="about.html"><i class="fa fa-info-circle"></i> About</a></li>
+                    <li><a href="student_assignments.html"><i class="fa fa-tasks"></i> Assignments</a></li>
+                    <li><a href="attendance.html"><i class="fa fa-calendar-check"></i> Manage Attendance</a></li>
+                    <li><a href="admin_data_sorting.html"><i class="fa fa-sort-amount-down"></i> Data Sorting</a></li>
+                    <li><a href="add_trainer.html"><i class="fa fa-user-plus"></i> Add Trainer</a></li>
+                    <li><a href="show_student.html"><i class="fa fa-user-plus"></i> show Student</a></li>
+                    <li><a href="show_trainer.html"><i class="fa fa-user-plus"></i> show Trainer</a></li>
+                    <li><a href="admin_profile.html"><i class="fa fa-user-circle"></i> Admin Profile</a></li>
+                </ul>
+                
+            </div>
+
+           
+
+           
+    </div>
+        </section>
+        <script>
+            function filterFeatures() {
+                const input = document.getElementById('searchInput');
+                const filter = input.value.toLowerCase();
+                const lists = document.querySelectorAll('.featuresList');
+                lists.forEach(ul => {
+                    const li = ul.getElementsByTagName('li');
+                    for (let i = 0; i < li.length; i++) {
+                        const a = li[i].getElementsByTagName('a')[0];
+                        const textValue = a.textContent || a.innerText;
+                        if (textValue.toLowerCase().indexOf(filter) > -1) {
+                            li[i].style.display = "";
+                        } else {
+                            li[i].style.display = "none";
+                        }
+                    }
+                });
+            }
+
+            function loadFeatureContent(title, url) {
+                const contentDiv = document.getElementById('featureContent');
+                const contentTitle = document.getElementById('contentTitle');
+                const contentArea = document.getElementById('contentArea');
+                
+                contentTitle.textContent = title;
+                contentArea.innerHTML = `<iframe src="${url}" width="100%" height="600px" frameborder="0"></iframe>`;
+                contentDiv.style.display = 'block';
+                
+                // Scroll to the content
+                contentDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const links = document.querySelectorAll('.featuresList a');
+                links.forEach(link => {
+                    link.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        const title = this.textContent;
+                        const url = this.getAttribute('href');
+                        loadFeatureContent(title, url);
+                    });
+                });
+            });
+        </script>
+        <script>
+            // Optional: Add JavaScript to handle profile icon click if needed
+            document.addEventListener('DOMContentLoaded', function() {
+                const profileIcon = document.querySelector('.profile-icon');
+                if (profileIcon) {
+                    profileIcon.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        // Navigate to admin_profile.html
+                        window.location.href = 'admin_profile.html';
+                    });
+                }
+
+                // Display user profile if logged in
+                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                if (currentUser) {
+                    const userName = document.getElementById('userName');
+                    const userRole = document.getElementById('userRole');
+                    userName.textContent = currentUser.name;
+                    userRole.textContent = currentUser.role;
+
+                    // Show profile display in navbar
+                    const profileDisplay = document.getElementById('profileDisplay');
+                    profileDisplay.style.display = 'block';
+
+                    // Also display in sidebar
+                    const sidebarProfile = document.getElementById('sidebarProfile');
+                    const sidebarUserName = document.getElementById('sidebarUserName');
+                    const sidebarUserRole = document.getElementById('sidebarUserRole');
+                    sidebarUserName.textContent = currentUser.name;
+                    sidebarUserRole.textContent = currentUser.role;
+                    sidebarProfile.style.display = 'block';
+                }
+            });
+        </script>
+      </main>
+   <script src="mode.js" ></script>  
+</body>
+</html> 
+ 

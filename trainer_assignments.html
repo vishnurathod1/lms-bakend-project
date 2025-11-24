@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trainer Assignments</title>
+    <link rel="stylesheet" href="trainer assig.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <main class="content">
+        <h1>Create New Assignment</h1>
+        <form id="assignment-form">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" required />
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="due-date">Date:</label>
+                <input type="date" id="due-date" required />
+            </div>
+            <div class="form-group">
+                <label for="course">Course:</label>
+                <select id="course" required>
+                    <option value="">Select Course</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">Create Assignment</button>
+        </form>
+    </main>
+    <script>
+        function getCourses() {
+            const courses = localStorage.getItem('courses');
+            return courses ? JSON.parse(courses) : [];
+        }
+
+        function getAssignments() {
+            const assignments = localStorage.getItem('assignments');
+            return assignments ? JSON.parse(assignments) : [];
+        }
+
+        function saveAssignments(assignments) {
+            localStorage.setItem('assignments', JSON.stringify(assignments));
+        }
+
+        function populateCourses() {
+            const courses = getCourses();
+            const courseSelect = document.getElementById('course');
+
+            // Clear existing options except the first one
+            courseSelect.innerHTML = '<option value="">Select Course</option>';
+
+            if (courses.length === 0) {
+                console.log('No courses found in localStorage');
+                const noCoursesOption = document.createElement('option');
+                noCoursesOption.value = '';
+                noCoursesOption.textContent = 'No courses available - Please visit courses page first';
+                noCoursesOption.disabled = true;
+                courseSelect.appendChild(noCoursesOption);
+
+                // Add helpful message and button
+                const form = document.getElementById('assignment-form');
+                const helpDiv = document.createElement('div');
+                helpDiv.id = 'courses-help';
+                helpDiv.style.cssText = 'background: #e7f3ff; padding: 15px; border-radius: 5px; margin-top: 15px; border-left: 4px solid #007bff;';
+                helpDiv.innerHTML = `
+                    <h4 style="margin: 0 0 10px 0; color: #007bff;">No Courses Available</h4>
+                    <p style="margin: 0 0 10px 0;">To create assignments, you need to have courses available in the system.</p>
+                    <button type="button" onclick="window.location.href='courses_list.html'" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                        Go to Courses Page
+                    </button>
+                `;
+                form.appendChild(helpDiv);
+                return;
+            }
+
+            // Remove help message if courses are available
+            const existingHelp = document.getElementById('courses-help');
+            if (existingHelp) {
+                existingHelp.remove();
+            }
+
+            // Filter only active courses
+            const activeCourses = courses.filter(course => course.status === 'Active');
+
+            if (activeCourses.length === 0) {
+                const noActiveOption = document.createElement('option');
+                noActiveOption.value = '';
+                noActiveOption.textContent = 'No active courses available';
+                noActiveOption.disabled = true;
+                courseSelect.appendChild(noActiveOption);
+                return;
+            }
+
+            activeCourses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course.title;
+                option.textContent = `${course.title} (₹${course.price} - ${course.duration} months)`;
+                courseSelect.appendChild(option);
+            });
+
+            console.log(`Populated ${activeCourses.length} active courses in dropdown`);
+        }
+
+        document.getElementById('assignment-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const dueDate = document.getElementById('due-date').value;
+            const course = document.getElementById('course').value;
+            const status = document.getElementById('status').value;
+
+            if (!title || !description || !dueDate || !course) {
+                alert('All fields are required.');
+                return;
+            }
+
+            const assignments = getAssignments();
+            // Prevent duplicate entries by checking if an assignment with the same title and course exists
+            const duplicate = assignments.some(assignment => assignment.title === title && assignment.course === course);
+            if (duplicate) {
+                alert('This assignment already exists for the selected course.');
+                return;
+            }
+
+            assignments.push({ title, description, dueDate, course, status });
+            saveAssignments(assignments);
+            alert('Assignment created successfully!');
+            // Reset form
+            document.getElementById('assignment-form').reset();
+        });
+
+        // Populate courses on load
+        populateCourses();
+    </script>
+</body>
+</html>

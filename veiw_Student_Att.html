@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Student Attendance</title>
+    <link rel="stylesheet" href="attendance.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    
+ 
+    <div class="container">
+        <h1>Student Attendance</h1>
+
+        <!-- <div class="form-section">
+            <h2>Add Attendance</h2>
+            <form id="attendanceForm">
+                <label for="userName">User Name:</label>
+                <input type="text" id="userName" required>
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" required>
+
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" required>
+
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime" required>
+
+                <button type="submit">Add Attendance</button>
+            </form>
+        </div> -->
+
+        <div class="export-buttons" style="margin-bottom: 10px;">
+            <button onclick="exportToExcel()">Export to Excel</button>
+            <button onclick="exportToPDF()">Export to PDF</button>
+        </div>
+
+        <div class="table-section">
+            <h2>Attendance Records</h2>
+            <table id="studentAttendanceTable">
+                <thead>
+                    <tr>
+                        <th>User Type</th>
+                        <th>User Name</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Hours</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Student attendance records will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 
+    <script>
+        // Load student attendance records from localStorage
+        function loadStudentAttendance() {
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            const tbody = document.querySelector('#studentAttendanceTable tbody');
+            tbody.innerHTML = '';
+ 
+            // Filter for students only
+            const studentRecords = attendance.filter(record => record.userType === 'student');
+ 
+            studentRecords.forEach((record, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.userType}</td>
+                    <td>${record.userName}</td>
+                    <td>${record.subject || ''}</td>
+                    <td>${record.date}</td>
+                    <td>${record.startTime || ''}</td>
+                    <td>${record.endTime || ''}</td>
+                    <td>${record.hours || ''}</td>
+                    <td>${record.status}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+ 
+        // Edit record
+        function editRecord(index) {
+            const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            // Filter student records
+            const studentRecords = attendance.filter(record => record.userType === 'student');
+            const record = studentRecords[index];
+ 
+            // Populate attendance.html form for editing (optional: could redirect or handle here)
+            alert('Editing record for ' + record.userName + '. Please use the main attendance page to edit.');
+ 
+            // Alternatively, implement editing here or redirect to attendance.html
+        }
+ 
+        // Delete record
+        function deleteRecord(index) {
+            let attendance = JSON.parse(localStorage.getItem('attendance')) || [];
+            // Filter student records
+            const studentRecords = attendance.filter(record => record.userType === 'student');
+            const recordToDelete = studentRecords[index];
+ 
+            // Find index of recordToDelete in full attendance array
+            const fullIndex = attendance.findIndex(
+                rec => rec.userType === recordToDelete.userType &&
+                       rec.userName === recordToDelete.userName &&
+                       rec.date === recordToDelete.date &&
+                       rec.status === recordToDelete.status
+            );
+ 
+            if (fullIndex > -1) {
+                attendance.splice(fullIndex, 1);
+                localStorage.setItem('attendance', JSON.stringify(attendance));
+                loadStudentAttendance();
+            }
+        }
+ 
+        // Initial load
+        loadStudentAttendance();
+ 
+        // Listen for localStorage changes to auto-update
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'attendance') {
+                loadStudentAttendance();
+            }
+        });
+    </script>
+ 
+    <!-- Add SheetJS and jsPDF CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ 
+    <script>
+        function exportToExcel() {
+            const table = document.getElementById('studentAttendanceTable');
+            const wb = XLSX.utils.table_to_book(table, { sheet: "Student Attendance" });
+            XLSX.writeFile(wb, 'student_attendance.xlsx');
+        }
+ 
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+ 
+            doc.text("Student Attendance", 14, 16);
+            const res = doc.autoTableHtmlToJson(document.getElementById('studentAttendanceTable'));
+            doc.autoTable({
+                head: [res.columns],
+                body: res.data,
+                startY: 20,
+            });
+            doc.save('student_attendance.pdf');
+        }
+    </script>
+</body>
+</html>

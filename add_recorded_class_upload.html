@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recorded Video</title>
+    <link rel="stylesheet" href="recorded_lecture_updated.css">
+</head>
+<body>
+    <div class="recorded-lecture-class-main">
+        <h1>Add Recorded Video</h1>
+        <div class="recorded-lecture-class-item">
+            <div class="class-header">
+                <h3>Upload New Recorded Video</h3>
+            </div>
+            <div class="class-content">
+                <form id="uploadForm">
+                    <div class="meta-item">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="meta-item">
+                        <label for="subject">Subject:</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    <div class="meta-item">
+                        <label for="trainer">Trainer:</label>
+                        <input type="text" id="trainer" name="trainer" required>
+                    </div>
+                    <div class="meta-item">
+                        <label>Video Source:</label>
+                        <input type="radio" id="uploadOption" name="videoSource" value="upload" checked>
+                        <label for="uploadOption">Upload Video File</label>
+                        <input type="radio" id="urlOption" name="videoSource" value="url">
+                        <label for="urlOption">Provide Video URL</label>
+                    </div>
+                    <div class="meta-item upload-input">
+                        <label for="videoFile">Video File:</label>
+                        <input type="file" id="videoFile" name="videoFile" accept="video/*">
+                    </div>
+                    <div class="meta-item url-input" style="display: none;">
+                        <label for="url">Video URL:</label>
+                        <input type="url" id="url" name="url">
+                    </div>
+                    <!-- Removed second URL input -->
+                    <!--
+                    <div class="meta-item">
+                        <label for="url2">Optional Additional URL:</label>
+                        <input type="url" id="url2" name="url2">
+                    </div>
+                    -->
+                    <div class="class-actions">
+                        <button type="submit" class="btn-download">Upload Video</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // IndexedDB helper functions
+        const dbName = 'RecordedVideosDB';
+        const storeName = 'videos';
+
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(dbName, 1);
+                request.onupgradeneeded = function(event) {
+                    const db = event.target.result;
+                    if (!db.objectStoreNames.contains(storeName)) {
+                        db.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
+                    }
+                };
+                request.onsuccess = function(event) {
+                    resolve(event.target.result);
+                };
+                request.onerror = function(event) {
+                    reject(event.target.error);
+                };
+            });
+        }
+
+        function addVideo(videoData) {
+            return openDB().then(db => {
+                return new Promise((resolve, reject) => {
+                    const transaction = db.transaction(storeName, 'readwrite');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.add(videoData);
+                    request.onsuccess = () => resolve();
+                    request.onerror = (e) => reject(e.target.error);
+                });
+            });
+        }
+
+        // Toggle input fields based on radio selection
+        document.getElementById('uploadOption').addEventListener('change', function() {
+            document.querySelector('.upload-input').style.display = 'block';
+            document.querySelector('.url-input').style.display = 'none';
+            document.getElementById('videoFile').required = true;
+            document.getElementById('url').required = false;
+        });
+
+        document.getElementById('urlOption').addEventListener('change', function() {
+            document.querySelector('.upload-input').style.display = 'none';
+            document.querySelector('.url-input').style.display = 'block';
+            document.getElementById('videoFile').required = false;
+            document.getElementById('url').required = true;
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const subject = document.getElementById('subject').value;
+            const trainer = document.getElementById('trainer').value;
+            const url = document.getElementById('url').value;
+            const fileInput = document.getElementById('videoFile');
+            const file = fileInput.files[0];
+            const isUpload = document.getElementById('uploadOption').checked;
+
+            if (isUpload) {
+                if (!file) {
+                    alert('Please select a video file.');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const fileData = e.target.result;
+                    const videoData = {
+                        title: title,
+                        subject: subject,
+                        trainer: trainer,
+                        url: url,
+                        fileData: fileData,
+                        uploadDate: new Date().toISOString(),
+                        fileSize: file.size
+                    };
+
+                    addVideo(videoData).then(() => {
+                        alert('Video uploaded successfully!');
+                        document.getElementById('uploadForm').reset();
+                        // Reset display
+                        document.querySelector('.upload-input').style.display = 'block';
+                        document.querySelector('.url-input').style.display = 'none';
+                        document.getElementById('uploadOption').checked = true;
+                    }).catch(err => {
+                        console.error('Error saving video to IndexedDB', err);
+                        alert('Error saving video.');
+                    });
+                };
+                reader.onerror = function(e) {
+                    console.error('Error reading file', e);
+                    alert('Error reading video file.');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                if (!url) {
+                    alert('Please provide a video URL.');
+                    return;
+                }
+                const videoData = {
+                    title: title,
+                    subject: subject,
+                    trainer: trainer,
+                    url: url,
+                    fileData: null,
+                    uploadDate: new Date().toISOString(),
+                    fileSize: null
+                };
+
+                addVideo(videoData).then(() => {
+                    alert('Video added successfully by URL!');
+                    document.getElementById('uploadForm').reset();
+                    // Reset display
+                    document.querySelector('.upload-input').style.display = 'block';
+                    document.querySelector('.url-input').style.display = 'none';
+                    document.getElementById('uploadOption').checked = true;
+                }).catch(err => {
+                    console.error('Error saving video to IndexedDB', err);
+                    alert('Error saving video.');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

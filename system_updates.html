@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin System Updates</title>
+    <link rel="stylesheet" href="system_updates.css" />
+</head>
+<body>
+    <main class="updates-main">
+        <h1>Admin System Updates</h1>
+        <form id="updateForm">
+            <div class="form-group">
+                <label for="updateTitle">Title:</label>
+                <input type="text" id="updateTitle" required />
+            </div>
+            <div class="form-group">
+                <label for="updateContent">Content:</label>
+                <textarea id="updateContent" rows="5" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="targetAudience">Target Audience:</label>
+                <select id="targetAudience" required>
+                    <option value="">Select Audience</option>
+                    <option value="trainer">Trainer</option>
+                    <option value="student">Student</option>
+                    <option value="all">All</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">Add Update</button>
+        </form>
+    </main>
+    <script>
+        document.getElementById('updateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('updateTitle').value;
+            const content = document.getElementById('updateContent').value;
+            const audience = document.getElementById('targetAudience').value;
+            const update = {
+                title: title,
+                content: content,
+                audience: audience,
+                date: new Date().toISOString()
+            };
+            let updates = JSON.parse(localStorage.getItem('systemUpdates')) || [];
+            updates.push(update);
+            localStorage.setItem('systemUpdates', JSON.stringify(updates));
+            alert('System update added successfully!');
+            document.getElementById('updateForm').reset();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+/* Styles for Add Live Class page */
+
+body.add-live-class-page {
+    font-family: 'Arial', sans-serif;
+  background-color: white;
+    color:black;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+   background-color: #302d2d;
+    color:white;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.navbar-brand {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-item {
+    margin-left: 30px;
+}
+
+.navbar-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-link:hover {
+    background-color: #555;
+    border-radius: 5px;
+}
+
+.navbar-link.logout-link {
+    background-color: #e71d27;
+    border-radius: 5px;
+}
+
+.navbar-link.logout-link:hover {
+    background-color: #c41c1c;
+}
+
+.add-live-class-main {
+    margin-top: 10px; /* To avoid navbar overlap */
+    background:linear-gradient(55deg, #667eea, #764ba2,red, orange, yellow, green, blue, indigo, violet,white);background: rgb(255, 255, 255);
+    max-width: 600px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border:2 solid #ddd;
+}
+
+.recorded-lecture-class-main {
+    margin-top: 10px; /* To avoid navbar overlap */
+    max-width: 600%px;
+   
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border:2 solid #ddd;
+}
+#recorded-class-form{
+    width: 500px;
+    border: 2px solid black;
+    
+    
+    
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #050101;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    width: 300px;
+    
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="url"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.submit-btn {
+    width: 40%;
+    padding: 15px;
+    background: linear-gradient(135deg, #e71d27 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: red;
+    color:black
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .add-live-class-main {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .navbar-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-menu {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .navbar-item {
+        margin-left: 0;
+        margin-bottom: 5px;
+    }
+
+    .navbar-link {
+        display: block;
+        padding: 10px;
+    }
+}

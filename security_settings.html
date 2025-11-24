@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Security Settings</title>
+    <link rel="stylesheet" href="security_settings.css" />
+</head>
+<body class="security-settings-page">
+    <main class="security-settings-main">
+        <h1>Security Settings</h1>
+        <form id="security-settings-form">
+            <div class="form-group">
+                <label for="password-policy">Password Policy:</label>
+                <select id="password-policy">
+                    <option value="default">Default Policy</option>
+                    <option value="strong">Strong Policy (min 12 chars, special chars)</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="two-factor-auth">Two-Factor Authentication:</label>
+                <select id="two-factor-auth">
+                    <option value="disabled">Disabled</option>
+                    <option value="enabled">Enabled</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="encryption">Data Encryption:</label>
+                <select id="encryption">
+                    <option value="none">None</option>
+                    <option value="aes256">AES-256</option>
+                    <option value="rsa">RSA</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">Save Security Settings</button>
+        </form>
+    </main>
+    <script>
+        function getSecuritySettings() {
+            const settings = localStorage.getItem('securitySettings');
+            return settings ? JSON.parse(settings) : {
+                passwordPolicy: 'default',
+                twoFactorAuth: 'disabled',
+                encryption: 'none'
+            };
+        }
+
+        function saveSecuritySettings(settings) {
+            localStorage.setItem('securitySettings', JSON.stringify(settings));
+        }
+
+        function loadSecuritySettings() {
+            const settings = getSecuritySettings();
+            document.getElementById('password-policy').value = settings.passwordPolicy;
+            document.getElementById('two-factor-auth').value = settings.twoFactorAuth;
+            document.getElementById('encryption').value = settings.encryption;
+        }
+
+        document.getElementById('security-settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const settings = {
+                passwordPolicy: document.getElementById('password-policy').value,
+                twoFactorAuth: document.getElementById('two-factor-auth').value,
+                encryption: document.getElementById('encryption').value
+            };
+            saveSecuritySettings(settings);
+            alert('Security settings saved successfully!');
+        });
+
+        // Load settings on page load
+        loadSecuritySettings();
+    </script>
+</body>
+</html>

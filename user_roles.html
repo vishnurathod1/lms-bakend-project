@@ -1,0 +1,247 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Roles</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="user-roles-page">
+    <main class="user-roles-main">
+        <h1>User Roles Management</h1>
+        <section class="roles-section">
+            <h2>Roles</h2>
+            <input type="text" id="role-search" placeholder="Search roles..." />
+            <button id="add-role-btn" class="submit-btn">Add Role</button>
+            <ul id="roles-list"></ul>
+        </section>
+        <section class="assignments-section">
+            <h2>Assign Roles to Users</h2>
+            <label for="user-select">Select User:</label>
+            <select id="user-select"></select>
+            <label for="role-select">Select Roles:</label>
+            <select id="role-select" multiple></select>
+            <button id="assign-role-btn" class="submit-btn">Assign Roles</button>
+            <h3>Current Assignments</h3>
+            <ul id="assignments-list"></ul>
+        </section>
+        <section class="actions">
+            <button id="export-csv-btn" class="submit-btn">Export Roles & Assignments to CSV</button>
+        </section>
+    </main>
+
+    <script>
+        // LocalStorage keys
+        const ROLES_KEY = 'userRoles';
+        const ASSIGNMENTS_KEY = 'userRoleAssignments';
+        const USERS_KEY = 'users'; // Assuming users are stored here
+
+        // Utility functions
+        function getRoles() {
+            const roles = localStorage.getItem(ROLES_KEY);
+            return roles ? JSON.parse(roles) : [];
+        }
+
+        function saveRoles(roles) {
+            localStorage.setItem(ROLES_KEY, JSON.stringify(roles));
+        }
+
+        function getAssignments() {
+            const assignments = localStorage.getItem(ASSIGNMENTS_KEY);
+            return assignments ? JSON.parse(assignments) : {};
+        }
+
+        function saveAssignments(assignments) {
+            localStorage.setItem(ASSIGNMENTS_KEY, JSON.stringify(assignments));
+        }
+
+        function getUsers() {
+            const users = localStorage.getItem(USERS_KEY);
+            return users ? JSON.parse(users) : [];
+        }
+
+        // Render roles list
+        function renderRoles(filter = '') {
+            const rolesList = document.getElementById('roles-list');
+            rolesList.innerHTML = '';
+            const roles = getRoles().filter(role => role.name.toLowerCase().includes(filter.toLowerCase()));
+            if (roles.length === 0) {
+                rolesList.innerHTML = '<li>No roles found</li>';
+                return;
+            }
+            roles.forEach(role => {
+                const li = document.createElement('li');
+                li.textContent = `${role.name}: ${role.description}`;
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Edit';
+                editBtn.onclick = () => editRole(role.name);
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = () => deleteRole(role.name);
+                li.appendChild(editBtn);
+                li.appendChild(deleteBtn);
+                rolesList.appendChild(li);
+            });
+        }
+
+        // Render users in select
+        function renderUsers() {
+            const userSelect = document.getElementById('user-select');
+            userSelect.innerHTML = '';
+            const users = getUsers();
+            if (users.length === 0) {
+                userSelect.innerHTML = '<option disabled>No users available</option>';
+                return;
+            }
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id || user.username || user.email || user.name || user;
+                option.textContent = user.name || user.username || user.email || user;
+                userSelect.appendChild(option);
+            });
+        }
+
+        // Render roles in multi-select for assignment
+        function renderRoleOptions() {
+            const roleSelect = document.getElementById('role-select');
+            roleSelect.innerHTML = '';
+            const roles = getRoles();
+            roles.forEach(role => {
+                const option = document.createElement('option');
+                option.value = role.name;
+                option.textContent = role.name;
+                roleSelect.appendChild(option);
+            });
+        }
+
+        // Render current assignments
+        function renderAssignments() {
+            const assignmentsList = document.getElementById('assignments-list');
+            assignmentsList.innerHTML = '';
+            const assignments = getAssignments();
+            const users = getUsers();
+            if (Object.keys(assignments).length === 0) {
+                assignmentsList.innerHTML = '<li>No assignments found</li>';
+                return;
+            }
+            for (const userId in assignments) {
+                const user = users.find(u => (u.id || u.username || u.email || u.name || u) === userId) || { name: userId };
+                const roles = assignments[userId];
+                const li = document.createElement('li');
+                li.textContent = `${user.name || userId}: ${roles.join(', ')}`;
+                assignmentsList.appendChild(li);
+            }
+        }
+
+        // Add role
+        function addRole() {
+            const name = prompt('Enter role name:');
+            if (!name) return alert('Role name is required.');
+            const description = prompt('Enter role description:') || '';
+            const roles = getRoles();
+            if (roles.find(r => r.name === name)) {
+                return alert('Role name already exists.');
+            }
+            roles.push({ name, description });
+            saveRoles(roles);
+            renderRoles();
+            renderRoleOptions();
+        }
+
+        // Edit role
+        function editRole(roleName) {
+            const roles = getRoles();
+            const role = roles.find(r => r.name === roleName);
+            if (!role) return alert('Role not found.');
+            const newName = prompt('Edit role name:', role.name);
+            if (!newName) return alert('Role name is required.');
+            const newDescription = prompt('Edit role description:', role.description) || '';
+            if (newName !== roleName && roles.find(r => r.name === newName)) {
+                return alert('Role name already exists.');
+            }
+            role.name = newName;
+            role.description = newDescription;
+            saveRoles(roles);
+            renderRoles();
+            renderRoleOptions();
+        }
+
+        // Delete role
+        function deleteRole(roleName) {
+            if (!confirm(`Are you sure you want to delete the role "${roleName}"?`)) return;
+            let roles = getRoles();
+            roles = roles.filter(r => r.name !== roleName);
+            saveRoles(roles);
+            // Remove role from assignments
+            let assignments = getAssignments();
+            for (const userId in assignments) {
+                assignments[userId] = assignments[userId].filter(r => r !== roleName);
+                if (assignments[userId].length === 0) {
+                    delete assignments[userId];
+                }
+            }
+            saveAssignments(assignments);
+            renderRoles();
+            renderRoleOptions();
+            renderAssignments();
+        }
+
+        // Assign roles to user
+        function assignRoles() {
+            const userSelect = document.getElementById('user-select');
+            const roleSelect = document.getElementById('role-select');
+            const userId = userSelect.value;
+            if (!userId) return alert('Please select a user.');
+            const selectedRoles = Array.from(roleSelect.selectedOptions).map(opt => opt.value);
+            if (selectedRoles.length === 0) return alert('Please select at least one role.');
+            let assignments = getAssignments();
+            assignments[userId] = selectedRoles;
+            saveAssignments(assignments);
+            renderAssignments();
+        }
+
+        // Export roles and assignments to CSV
+        function exportToCSV() {
+            const roles = getRoles();
+            const assignments = getAssignments();
+            const users = getUsers();
+
+            const csvRows = [];
+            csvRows.push('User,Roles');
+
+            for (const userId in assignments) {
+                const user = users.find(u => (u.id || u.username || u.email || u.name || u) === userId) || { name: userId };
+                const rolesList = assignments[userId].join('; ');
+                csvRows.push(`"${user.name || userId}","${rolesList}"`);
+            }
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'user_roles.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Search roles
+        document.getElementById('role-search').addEventListener('input', (e) => {
+            renderRoles(e.target.value);
+        });
+
+        // Button event listeners
+        document.getElementById('add-role-btn').addEventListener('click', addRole);
+        document.getElementById('assign-role-btn').addEventListener('click', assignRoles);
+        document.getElementById('export-csv-btn').addEventListener('click', exportToCSV);
+
+        // Initial render
+        renderRoles();
+        renderUsers();
+        renderRoleOptions();
+        renderAssignments();
+    </script>
+</body>
+</html>

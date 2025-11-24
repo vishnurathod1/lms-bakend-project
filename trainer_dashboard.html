@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Dashboard</title>
+    <link rel="stylesheet" href="trainer_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="trainer-container">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="home.html" class="navbar-brand">LMS Project</a>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search graphs..." onkeyup="filterGraphs()" />
+                </div>
+                
+            </div>
+        </nav>
+        <h1>Trainer Dashboard</h1>
+        <p>Overview of training metrics with interactive graphs.</p>
+
+        <div class="dashboard-grid">
+            <!-- Row 1: 3 Graphs -->
+            <div class="graph-container">
+                <h3>Student Attendance</h3>
+                <canvas id="chart1"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Course Progress</h3>
+                <canvas id="chart2"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Rating Distribution</h3>
+                <canvas id="chart3"></canvas>
+            </div>
+
+            <!-- Row 2: 3 Graphs -->
+            <div class="graph-container">
+                <h3>Completion Rates</h3>
+                <canvas id="chart4"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Skill Assessment</h3>
+                <canvas id="chart5"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Assignment Submissions</h3>
+                <canvas id="chart6"></canvas>
+            </div>
+
+            <!-- Row 3: 3 Graphs -->
+            <div class="graph-container">
+                <h3>Monthly Activity</h3>
+                <canvas id="chart7"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Resource Usage</h3>
+                <canvas id="chart8"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Feedback Scores</h3>
+                <canvas id="chart9"></canvas>
+            </div>
+
+            <!-- Row 4: 3 Graphs -->
+            <div class="graph-container">
+                <h3>Enrollment Trends</h3>
+                <canvas id="chart10"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Performance Metrics</h3>
+                <canvas id="chart11"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Time Spent</h3>
+                <canvas id="chart12"></canvas>
+            </div>
+
+            <!-- Row 5: 3 Graphs (to exceed 12) -->
+            <div class="graph-container">
+                <h3>Quiz Results</h3>
+                <canvas id="chart13"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Engagement Levels</h3>
+                <canvas id="chart14"></canvas>
+            </div>
+            <div class="graph-container">
+                <h3>Satisfaction Survey</h3>
+                <canvas id="chart15"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterGraphs() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const containers = document.querySelectorAll('.graph-container');
+            containers.forEach(container => {
+                const h3 = container.querySelector('h3');
+                const textValue = h3.textContent || h3.innerText;
+                if (textValue.toLowerCase().indexOf(filter) > -1) {
+                    container.style.display = "";
+                } else {
+                    container.style.display = "none";
+                }
+            });
+        }
+    </script>
+
+    <script>
+        // Chart 1: Bar Chart - Student Attendance
+        const ctx1 = document.getElementById('chart1').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Attendance %',
+                    data: [85, 90, 88, 92],
+                    backgroundColor: '#667eea'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 2: Line Chart - Course Progress
+        const ctx2 = document.getElementById('chart2').getContext('2d');
+        new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                datasets: [{
+                    label: 'Progress %',
+                    data: [20, 45, 70, 95],
+                    borderColor: '#667eea'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 3: Pie Chart - Rating Distribution
+        const ctx3 = document.getElementById('chart3').getContext('2d');
+        new Chart(ctx3, {
+            type: 'pie',
+            data: {
+                labels: ['5 Stars', '4 Stars', '3 Stars'],
+                datasets: [{
+                    data: [60, 30, 10],
+                    backgroundColor: ['#4CAF50', '#FFC107', '#F44336']
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 4: Doughnut Chart - Completion Rates
+        const ctx4 = document.getElementById('chart4').getContext('2d');
+        new Chart(ctx4, {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'In Progress'],
+                datasets: [{
+                    data: [75, 25],
+                    backgroundColor: ['#4CAF50', '#FF9800']
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 5: Radar Chart - Skill Assessment
+        const ctx5 = document.getElementById('chart5').getContext('2d');
+        new Chart(ctx5, {
+            type: 'radar',
+            data: {
+                labels: ['Teaching', 'Communication', 'Organization', 'Adaptability'],
+                datasets: [{
+                    label: 'Skills',
+                    data: [8, 9, 7, 8],
+                    backgroundColor: 'rgba(102, 126, 234, 0.2)'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 6: Bar Chart - Assignment Submissions
+        const ctx6 = document.getElementById('chart6').getContext('2d');
+        new Chart(ctx6, {
+            type: 'bar',
+            data: {
+                labels: ['Course A', 'Course B', 'Course C'],
+                datasets: [{
+                    label: 'Submissions',
+                    data: [50, 40, 60],
+                    backgroundColor: '#667eea'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 7: Line Chart - Monthly Activity
+        const ctx7 = document.getElementById('chart7').getContext('2d');
+        new Chart(ctx7, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'Activity Hours',
+                    data: [30, 45, 50, 55, 60],
+                    borderColor: '#667eea'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 8: Pie Chart - Resource Usage
+        const ctx8 = document.getElementById('chart8').getContext('2d');
+        new Chart(ctx8, {
+            type: 'pie',
+            data: {
+                labels: ['Videos', 'Documents', 'Quizzes'],
+                datasets: [{
+                    data: [40, 35, 25],
+                    backgroundColor: ['#4CAF50', '#2196F3', '#FF5722']
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 9: Bar Chart - Feedback Scores
+        const ctx9 = document.getElementById('chart9').getContext('2d');
+        new Chart(ctx9, {
+            type: 'bar',
+            data: {
+                labels: ['Positive', 'Neutral', 'Negative'],
+                datasets: [{
+                    label: 'Feedback',
+                    data: [70, 20, 10],
+                    backgroundColor: '#667eea'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 10: Doughnut Chart - Enrollment Trends
+        const ctx10 = document.getElementById('chart10').getContext('2d');
+        new Chart(ctx10, {
+            type: 'doughnut',
+            data: {
+                labels: ['New', 'Returning'],
+                datasets: [{
+                    data: [60, 40],
+                    backgroundColor: ['#4CAF50', '#9C27B0']
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 11: Radar Chart - Performance Metrics
+        const ctx11 = document.getElementById('chart11').getContext('2d');
+        new Chart(ctx11, {
+            type: 'radar',
+            data: {
+                labels: ['Efficiency', 'Quality', 'Speed', 'Accuracy'],
+                datasets: [{
+                    label: 'Metrics',
+                    data: [9, 8, 7, 9],
+                    backgroundColor: 'rgba(102, 126, 234, 0.2)'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 12: Line Chart - Time Spent
+        const ctx12 = document.getElementById('chart12').getContext('2d');
+        new Chart(ctx12, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                datasets: [{
+                    label: 'Hours',
+                    data: [6, 8, 7, 9, 8],
+                    borderColor: '#667eea'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 13: Bar Chart - Quiz Results
+        const ctx13 = document.getElementById('chart13').getContext('2d');
+        new Chart(ctx13, {
+            type: 'bar',
+            data: {
+                labels: ['Quiz 1', 'Quiz 2', 'Quiz 3'],
+                datasets: [{
+                    label: 'Average Score',
+                    data: [85, 90, 88],
+                    backgroundColor: '#667eea'
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 14: Pie Chart - Engagement Levels
+        const ctx14 = document.getElementById('chart14').getContext('2d');
+        new Chart(ctx14, {
+            type: 'pie',
+            data: {
+                labels: ['High', 'Medium', 'Low'],
+                datasets: [{
+                    data: [50, 30, 20],
+                    backgroundColor: ['#4CAF50', '#FFC107', '#F44336']
+                }]
+            },
+            options: { responsive: true }
+        });
+
+        // Chart 15: Doughnut Chart - Satisfaction Survey
+        const ctx15 = document.getElementById('chart15').getContext('2d');
+        new Chart(ctx15, {
+            type: 'doughnut',
+            data: {
+                labels: ['Satisfied', 'Unsatisfied'],
+                datasets: [{
+                    data: [80, 20],
+                    backgroundColor: ['#4CAF50', '#F44336']
+                }]
+            },
+            options: { responsive: true }
+        });
+    </script>
+</body>
+</html>

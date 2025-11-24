@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+    <main class="manage-users-main">
+        <h1>Dashboard</h1>
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <p id="totalUsersDisplay">150</p>
+                <div class="graph-bar" style="width: 75%;"></div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Courses</h3>
+                <p>25</p>
+                <div class="graph-bar" style="width: 50%;"></div>
+            </div>
+            <div class="stat-card">
+                <h3>Completed Assignments</h3>
+                <p>320</p>
+                <div class="graph-bar" style="width: 90%;"></div>
+            </div>
+            <div class="stat-card">
+                <h3>System Health</h3>
+                <p>Good</p>
+                <div class="graph-bar" style="width: 100%; background-color: #4CAF50;"></div>
+            </div>
+        </div>
+        
+        <section class="recent-activity">
+        </section>
+        <section class="add-user-section">
+            <div class="chart-section">
+                <h2>User Type Distribution</h2>
+                <canvas id="userGrowthChart"></canvas>
+            </div>
+        </section>
+        <section class="student-trainer-report-section">
+            <h2>Student </h2>
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>Student Report</h3>
+                    <canvas id="studentReportChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Monthly Active Users (Line Chart)</h3>
+                    <canvas id="lineChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Course Category Distribution (Pie Chart)</h3>
+                    <canvas id="pieChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Assignment Status (Doughnut Chart)</h3>
+                    <canvas id="doughnutChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Trainer Performance Metrics (Radar Chart)</h3>
+                    <canvas id="radarChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Compliance Status (Polar Area Chart)</h3>
+                    <canvas id="polarAreaChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Course Ratings (Scatter Chart)</h3>
+                    <canvas id="scatterChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Combined User Growth and Course Completion (Mixed Chart)</h3>
+                    <canvas id="mixedChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        // Load initial data from localStorage
+        const initialCounts = JSON.parse(localStorage.getItem('userTypeCounts')) || { students: 100, admins: 30, trainers: 20 };
+        let totalUsers = initialCounts.students + initialCounts.admins + initialCounts.trainers;
+        let activeCourses = 25;
+        let completedAssignments = 320;
+        let userTypeData = [initialCounts.students, initialCounts.admins, initialCounts.trainers]; // Students, Admins, Trainers
+
+        function updateStats() {
+            document.querySelector('.stat-card:nth-child(1) p').textContent = totalUsers;
+            document.querySelector('.stat-card:nth-child(2) p').textContent = activeCourses;
+            document.querySelector('.stat-card:nth-child(3) p').textContent = completedAssignments;
+            updateGraphBars();
+            updateChart();
+        }
+
+        function updateGraphBars() {
+            const bars = document.querySelectorAll('.graph-bar');
+            bars[0].style.width = (totalUsers / 200) * 100 + '%';
+            bars[1].style.width = (activeCourses / 50) * 100 + '%';
+            bars[2].style.width = (completedAssignments / 400) * 100 + '%';
+        }
+        
+
+        function updateChart() {
+            if (window.userChart) {
+                window.userChart.data.datasets[0].data = userTypeData;
+                window.userChart.update();
+            }
+        }
+
+        // Initialize Chart.js
+        const ctx = document.getElementById('userGrowthChart').getContext('2d');
+        window.userChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Students', 'Admins', 'Trainers'],
+                datasets: [{
+                    label: 'User Count',
+                    data: userTypeData,
+                    backgroundColor: [
+                        '#667eea',
+                        '#764ba2',
+                        '#e71d27'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Auto-update every 30 seconds
+        setInterval(() => {
+            // Fetch updated counts from localStorage
+            const counts = JSON.parse(localStorage.getItem('userTypeCounts')) || { students: 100, admins: 30, trainers: 20 };
+            userTypeData[0] = counts.students;
+            userTypeData[1] = counts.admins;
+    
+            totalUsers = counts.students + counts.admins + counts.trainers;
+            updateStats();
+        }, 30000);
+
+        // Student and  report data (example)
+        const studentLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+        const studentData = [30, 40, 45, 50, 49, 60, 70];
+        
+
+        // Bar chart for student report
+        const studentCtx = document.getElementById('studentReportChart').getContext('2d');
+        const studentReportChart = new Chart(studentCtx, {
+            type: 'bar',
+            data: {
+                labels: studentLabels,
+                datasets: [{
+                    label: 'Student Report',
+                    data: studentData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Additional charts initialization
+
+        // Line chart
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        const lineChart = new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Monthly Active Users',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Pie chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        const pieChart = new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Science', 'Math', 'History', 'Art', 'Technology'],
+                datasets: [{
+                    label: 'Course Category Distribution',
+                    data: [12, 19, 3, 5, 2],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(201, 203, 207)'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Doughnut chart
+        const doughnutCtx = document.getElementById('doughnutChart').getContext('2d');
+        const doughnutChart = new Chart(doughnutCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'Pending', 'Overdue'],
+                datasets: [{
+                    label: 'Assignment Status',
+                    data: [300, 50, 100],
+                    backgroundColor: [
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)',
+                        'rgb(255, 99, 132)'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Radar chart
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        const radarChart = new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Communication', 'Knowledge', 'Punctuality', 'Engagement', 'Feedback'],
+                datasets: [{
+                    label: 'Trainer Performance Metrics',
+                    data: [65, 59, 90, 81, 56],
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)',
+                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(54, 162, 235)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: false
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        // Polar Area chart
+        const polarAreaCtx = document.getElementById('polarAreaChart').getContext('2d');
+        const polarAreaChart = new Chart(polarAreaCtx, {
+            type: 'polarArea',
+            data: {
+                labels: ['Compliant', 'Non-Compliant', 'Pending'],
+                datasets: [{
+                    label: 'Compliance Status',
+                    data: [11, 16, 7],
+                    backgroundColor: [
+                        'rgb(75, 192, 192)',
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 205, 86)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Scatter chart
+        const scatterCtx = document.getElementById('scatterChart').getContext('2d');
+        const scatterChart = new Chart(scatterCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Course Ratings',
+                    data: [
+                        {x: 1, y: 3},
+                        {x: 2, y: 7},
+                        {x: 3, y: 4},
+                        {x: 4, y: 6},
+                        {x: 5, y: 5}
+                    ],
+                    backgroundColor: 'rgb(54, 162, 235)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        min: 0,
+                        max: 5
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 10
+                    }
+                }
+            }
+        });
+
+        // Mixed chart
+        const mixedCtx = document.getElementById('mixedChart').getContext('2d');
+        const mixedChart = new Chart(mixedCtx, {
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    type: 'bar',
+                    label: 'User Growth',
+                    data: [50, 60, 70, 80, 90, 100, 110],
+                    backgroundColor: 'rgba(102, 126, 234, 0.7)'
+                }, {
+                    type: 'line',
+                    label: 'Course Completion',
+                    data: [30, 40, 50, 60, 70, 80, 90],
+                    borderColor: 'rgba(231, 29, 39, 0.7)',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

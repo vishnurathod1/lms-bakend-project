@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Data Sorting</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin_data_sorting.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-data-sorting-page">
+    <main class="admin-data-sorting-main">
+        <h1><i class="fas fa-sort-amount-down"></i> Student & Trainer Data Management</h1>
+
+        <!-- Statistics Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Students</h3>
+                <div class="stat-number" id="totalStudents">0</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Trainers</h3>
+                <div class="stat-number" id="totalTrainers">0</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Users</h3>
+                <div class="stat-number" id="activeUsers">0</div>
+                <div class="stat-label">Currently Active</div>
+            </div>
+            <div class="stat-card">
+                <h3>Inactive Users</h3>
+                <div class="stat-number" id="inactiveUsers">0</div>
+                <div class="stat-label">Need Attention</div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="data-sorting-header">
+            <div class="search-filter-section">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by name, email, or role..." />
+                <select id="statusFilter" class="filter-select">
+                    <option value="">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+                <select id="roleFilter" class="filter-select">
+                    <option value="">All Roles</option>
+                    <option value="Student">Students</option>
+                    <option value="Trainer">Trainers</option>
+                    <option value="Admin">Admins</option>
+                </select>
+            </div>
+            <div class="sort-controls">
+                <button id="exportBtn" class="export-btn">
+                    <i class="fas fa-download"></i> Export CSV
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="students">
+                <i class="fas fa-user-graduate"></i> Students
+            </button>
+            <button class="tab-btn" data-tab="trainers">
+                <i class="fas fa-chalkboard-teacher"></i> Trainers
+            </button>
+            <button class="tab-btn" data-tab="all">
+                <i class="fas fa-users"></i> All Users
+            </button>
+        </div>
+
+        <!-- Students Data Table -->
+        <div id="studentsTab" class="data-table-container">
+            <table class="data-table" id="studentsTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column="id">ID</th>
+                        <th class="sortable" data-column="name">Name</th>
+                        <th class="sortable" data-column="email">Email</th>
+                        <th class="sortable" data-column="role">Role</th>
+                        <th class="sortable" data-column="status">Status</th>
+                        <th class="sortable" data-column="phone">Phone</th>
+                        <th class="sortable" data-column="courses">Courses</th>
+                        <th class="sortable" data-column="grade">Avg Grade</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="studentsTableBody">
+                    <!-- Student data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Trainers Data Table -->
+        <div id="trainersTab" class="data-table-container" style="display: none;">
+            <table class="data-table" id="trainersTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column="id">ID</th>
+                        <th class="sortable" data-column="name">Name</th>
+                        <th class="sortable" data-column="email">Email</th>
+                        <th class="sortable" data-column="role">Role</th>
+                        <th class="sortable" data-column="status">Status</th>
+                        <th class="sortable" data-column="phone">Phone</th>
+                        <th class="sortable" data-column="courses">Courses</th>
+                        <th class="sortable" data-column="assignments">Assignments</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="trainersTableBody">
+                    <!-- Trainer data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- All Users Data Table -->
+        <div id="allTab" class="data-table-container" style="display: none;">
+            <table class="data-table" id="allUsersTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column="id">ID</th>
+                        <th class="sortable" data-column="name">Name</th>
+                        <th class="sortable" data-column="email">Email</th>
+                        <th class="sortable" data-column="role">Role</th>
+                        <th class="sortable" data-column="status">Status</th>
+                        <th class="sortable" data-column="phone">Phone</th>
+                        <th class="sortable" data-column="joinDate">Join Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="allUsersTableBody">
+                    <!-- All users data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-database"></i>
+            <h3>No Data Found</h3>
+            <p>No users match your current search and filter criteria.</p>
+        </div>
+    </main>
+
+    <!-- Edit User Modal -->
+    <div id="editModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2><i class="fas fa-edit"></i> Edit User</h2>
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId" />
+                <div class="form-group">
+                    <label for="editName">Name:</label>
+                    <input type="text" id="editName" required />
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" required />
+                </div>
+                <div class="form-group">
+                    <label for="editRole">Role:</label>
+                    <select id="editRole" required>
+                        <option value="Student">Student</option>
+                        <option value="Trainer">Trainer</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Status:</label>
+                    <select id="editStatus" required>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Phone:</label>
+                    <input type="text" id="editPhone" />
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn cancel-btn" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="modal-btn save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let users = [];
+        let currentTab = 'students';
+        let currentSort = { column: 'id', direction: 'asc' };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUsers();
+            setupEventListeners();
+            updateStatistics();
+            renderTable();
+        });
+
+        // Load users from localStorage
+        function loadUsers() {
+            const usersData = localStorage.getItem('users');
+            if (usersData) {
+                users = JSON.parse(usersData);
+            } else {
+                // Initialize with sample data if no users exist
+                users = [
+                    {
+                        id: 1,
+                        name: "John Smith",
+                        email: "john.smith@email.com",
+                        role: "Student",
+                        status: "Active",
+                        phone: "+1-234-567-8901",
+                        joinDate: "2024-01-15",
+                        courses: 3,
+                        avgGrade: "A-"
+                    },
+                    {
+                        id: 2,
+                        name: "Sarah Johnson",
+                        email: "sarah.johnson@email.com",
+                        role: "Student",
+                        status: "Active",
+                        phone: "+1-234-567-8902",
+                        joinDate: "2024-01-20",
+                        courses: 4,
+                        avgGrade: "B+"
+                    },
+                    {
+                        id: 3,
+                        name: "Dr. Michael Brown",
+                        email: "michael.brown@email.com",
+                        role: "Trainer",
+                        status: "Active",
+                        phone: "+1-234-567-8903",
+                        joinDate: "2024-01-10",
+                        courses: 2,
+                        assignments: 15
+                    },
+                    {
+                        id: 4,
+                        name: "Emily Davis",
+                        email: "emily.davis@email.com",
+                        role: "Trainer",
+                        status: "Inactive",
+                        phone: "+1-234-567-8904",
+                        joinDate: "2024-01-05",
+                        courses: 1,
+                        assignments: 8
+                    },
+                    {
+                        id: 5,
+                        name: "Admin User",
+                        email: "admin@lms.com",
+                        role: "Admin",
+                        status: "Active",
+                        phone: "+1-234-567-8905",
+                        joinDate: "2024-01-01"
+                    }
+                ];
+                saveUsers();
+            }
+        }
+
+        // Save users to localStorage
+        function saveUsers() {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab navigation
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', function() {
+                renderTable();
+            });
+
+            // Filter functionality
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                renderTable();
+            });
+
+            document.getElementById('roleFilter').addEventListener('change', function() {
+                renderTable();
+            });
+
+            // Export functionality
+            document.getElementById('exportBtn').addEventListener('click', function() {
+                exportToCSV();
+            });
+
+            // Sortable table headers
+            document.querySelectorAll('.sortable').forEach(header => {
+                header.addEventListener('click', function() {
+                    sortTable(this.dataset.column);
+                });
+            });
+
+            // Edit form submission
+            document.getElementById('editUserForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveUserChanges();
+            });
+        }
+
+        // Switch between tabs
+        function switchTab(tab) {
+            currentTab = tab;
+
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+            // Show/hide tables
+            document.getElementById('studentsTab').style.display = tab === 'students' ? 'block' : 'none';
+            document.getElementById('trainersTab').style.display = tab === 'trainers' ? 'block' : 'none';
+            document.getElementById('allTab').style.display = tab === 'all' ? 'block' : 'none';
+
+            renderTable();
+        }
+
+        // Sort table
+        function sortTable(column) {
+            // Remove sort classes from all headers
+            document.querySelectorAll('.sortable').forEach(header => {
+                header.classList.remove('sort-asc', 'sort-desc');
+            });
+
+            // Determine sort direction
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+
+            // Add sort class to current header
+            const header = document.querySelector(`[data-column="${column}"]`);
+            header.classList.add(`sort-${currentSort.direction}`);
+
+            renderTable();
+        }
+
+        // Filter and sort data
+        function getFilteredData() {
+            let filteredUsers = [...users];
+
+            // Apply search filter
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (searchTerm) {
+                filteredUsers = filteredUsers.filter(user =>
+                    user.name.toLowerCase().includes(searchTerm) ||
+                    user.email.toLowerCase().includes(searchTerm) ||
+                    user.role.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Apply status filter
+            const statusFilter = document.getElementById('statusFilter').value;
+            if (statusFilter) {
+                filteredUsers = filteredUsers.filter(user => user.status === statusFilter);
+            }
+
+            // Apply role filter
+            const roleFilter = document.getElementById('roleFilter').value;
+            if (roleFilter) {
+                filteredUsers = filteredUsers.filter(user => user.role === roleFilter);
+            }
+
+            // Apply tab filter
+            if (currentTab === 'students') {
+                filteredUsers = filteredUsers.filter(user => user.role === 'Student');
+            } else if (currentTab === 'trainers') {
+                filteredUsers = filteredUsers.filter(user => user.role === 'Trainer');
+            }
+
+            // Apply sorting
+            filteredUsers.sort((a, b) => {
+                let aVal = a[currentSort.column] || '';
+                let bVal = b[currentSort.column] || '';
+
+                // Handle numeric sorting for ID
+                if (currentSort.column === 'id') {
+                    aVal = parseInt(aVal);
+                    bVal = parseInt(bVal);
+                }
+
+                // Handle string sorting
+                if (typeof aVal === 'string') {
+                    aVal = aVal.toLowerCase();
+                    bVal = bVal.toLowerCase();
+                }
+
+                if (currentSort.direction === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+
+            return filteredUsers;
+        }
+
+        // Render table
+        function renderTable() {
+            const filteredUsers = getFilteredData();
+            const isEmpty = filteredUsers.length === 0;
+
+            // Show/hide empty state
+            document.getElementById('emptyState').style.display = isEmpty ? 'block' : 'none';
+
+            if (isEmpty) {
+                document.querySelectorAll('.data-table-container').forEach(container => {
+                    container.style.display = 'none';
+                });
+                return;
+            }
+
+            // Show appropriate table
+            document.querySelectorAll('.data-table-container').forEach(container => {
+                container.style.display = 'none';
+            });
+
+            const activeContainer = document.getElementById(`${currentTab}Tab`);
+            if (activeContainer) {
+                activeContainer.style.display = 'block';
+            }
+
+            // Render data based on current tab
+            if (currentTab === 'students') {
+                renderStudentsTable(filteredUsers);
+            } else if (currentTab === 'trainers') {
+                renderTrainersTable(filteredUsers);
+            } else {
+                renderAllUsersTable(filteredUsers);
+            }
+
+            updateStatistics();
+        }
+
+        // Render students table
+        function renderStudentsTable(students) {
+            const tbody = document.getElementById('studentsTableBody');
+            tbody.innerHTML = '';
+
+            students.forEach((student, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td>${student.email}</td>
+                    <td><span class="role-badge role-student">${student.role}</span></td>
+                    <td><span class="status-badge status-${student.status.toLowerCase()}">${student.status}</span></td>
+                    <td>${student.phone || 'N/A'}</td>
+                    <td>${student.courses || 0}</td>
+                    <td>${student.avgGrade || 'N/A'}</td>
+                    <td>
+                        <button class="action-btn view-btn" onclick="viewUser(${student.id})" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-btn" onclick="editUser(${student.id})" title="Edit User">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteUser(${student.id})" title="Delete User">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Render trainers table
+        function renderTrainersTable(trainers) {
+            const tbody = document.getElementById('trainersTableBody');
+            tbody.innerHTML = '';
+
+            trainers.forEach((trainer, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${trainer.id}</td>
+                    <td>${trainer.name}</td>
+                    <td>${trainer.email}</td>
+                    <td><span class="role-badge role-trainer">${trainer.role}</span></td>
+                    <td><span class="status-badge status-${trainer.status.toLowerCase()}">${trainer.status}</span></td>
+                    <td>${trainer.phone || 'N/A'}</td>
+                    <td>${trainer.courses || 0}</td>
+                    <td>${trainer.assignments || 0}</td>
+                    <td>
+                        <button class="action-btn view-btn" onclick="viewUser(${trainer.id})" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-btn" onclick="editUser(${trainer.id})" title="Edit User">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteUser(${trainer.id})" title="Delete User">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Render all users table
+        function renderAllUsersTable(allUsers) {
+            const tbody = document.getElementById('allUsersTableBody');
+            tbody.innerHTML = '';
+
+            allUsers.forEach((user, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td><span class="role-badge role-${user.role.toLowerCase()}">${user.role}</span></td>
+                    <td><span class="status-badge status-${user.status.toLowerCase()}">${user.status}</span></td>
+                    <td>${user.phone || 'N/A'}</td>
+                    <td>${user.joinDate || 'N/A'}</td>
+                    <td>
+                        <button class="action-btn view-btn" onclick="viewUser(${user.id})" title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-btn" onclick="editUser(${user.id})" title="Edit User">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteUser(${user.id})" title="Delete User">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const totalStudents = users.filter(u => u.role === 'Student').length;
+            const totalTrainers = users.filter(u => u.role === 'Trainer').length;
+            const activeUsers = users.filter(u => u.status === 'Active').length;
+            const inactiveUsers = users.filter(u => u.status === 'Inactive').length;
+
+            document.getElementById('totalStudents').textContent = totalStudents;
+            document.getElementById('totalTrainers').textContent = totalTrainers;
+            document.getElementById('activeUsers').textContent = activeUsers;
+            document.getElementById('inactiveUsers').textContent = inactiveUsers;
+        }
+
+        // View user details
+        function viewUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                let details = `User Details:\n\n`;
+                details += `Name: ${user.name}\n`;
+                details += `Email: ${user.email}\n`;
+                details += `Role: ${user.role}\n`;
+                details += `Status: ${user.status}\n`;
+                details += `Phone: ${user.phone || 'N/A'}\n`;
+                details += `Join Date: ${user.joinDate || 'N/A'}\n`;
+
+                if (user.role === 'Student') {
+                    details += `Courses: ${user.courses || 0}\n`;
+                    details += `Average Grade: ${user.avgGrade || 'N/A'}\n`;
+                } else if (user.role === 'Trainer') {
+                    details += `Courses: ${user.courses || 0}\n`;
+                    details += `Assignments Created: ${user.assignments || 0}\n`;
+                }
+
+                alert(details);
+            }
+        }
+
+        // Edit user
+        function editUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                document.getElementById('editUserId').value = user.id;
+                document.getElementById('editName').value = user.name;
+                document.getElementById('editEmail').value = user.email;
+                document.getElementById('editRole').value = user.role;
+                document.getElementById('editStatus').value = user.status;
+                document.getElementById('editPhone').value = user.phone || '';
+
+                document.getElementById('editModal').style.display = 'flex';
+            }
+        }
+
+        // Close edit modal
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // Save user changes
+        function saveUserChanges() {
+            const userId = parseInt(document.getElementById('editUserId').value);
+            const name = document.getElementById('editName').value.trim();
+            const email = document.getElementById('editEmail').value.trim();
+            const role = document.getElementById('editRole').value;
+            const status = document.getElementById('editStatus').value;
+            const phone = document.getElementById('editPhone').value.trim();
+
+            if (!name || !email) {
+                alert('Name and Email are required.');
+                return;
+            }
+
+            const userIndex = users.findIndex(u => u.id === userId);
+            if (userIndex !== -1) {
+                users[userIndex] = { ...users[userIndex], name, email, role, status, phone };
+                saveUsers();
+                closeEditModal();
+                renderTable();
+                alert('User updated successfully!');
+            }
+        }
+
+        // Delete user
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                users = users.filter(u => u.id !== userId);
+                saveUsers();
+                renderTable();
+                alert('User deleted successfully!');
+            }
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            const filteredUsers = getFilteredData();
+            if (filteredUsers.length === 0) {
+                alert('No data to export.');
+                return;
+            }
+
+            let csvContent = 'data:text/csv;charset=utf-8,';
+            csvContent += 'ID,Name,Email,Role,Status,Phone,Join Date';
+
+            if (currentTab === 'students') {
+                csvContent += ',Courses,Average Grade\n';
+            } else if (currentTab === 'trainers') {
+                csvContent += ',Courses,Assignments\n';
+            } else {
+                csvContent += '\n';
+            }
+
+            filteredUsers.forEach(user => {
+                let row = `${user.id},"${user.name}","${user.email}",${user.role},${user.status},"${user.phone || ''}","${user.joinDate || ''}"`;
+
+                if (currentTab === 'students') {
+                    row += `,${user.courses || 0},"${user.avgGrade || ''}"\n`;
+                } else if (currentTab === 'trainers') {
+                    row += `,${user.courses || 0},${user.assignments || 0}\n`;
+                } else {
+                    row += '\n';
+                }
+
+                csvContent += row;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `lms_users_${currentTab}_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

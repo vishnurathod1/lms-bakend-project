@@ -1,0 +1,89 @@
+/* View Trainees Page Styles */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    border-radius: 30px;
+    border: 3px solid wheat;
+}
+
+
+/* Adjust body padding for fixed navbar */
+.view-trainees-page {
+    padding-top: 60px;
+}
+
+.view-trainees-main {
+    max-width: 1200px;
+    margin: 0px ;
+    padding:0px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    color: #333;
+    border-radius: 30px;
+    border: 3px solid wheat;
+    /* border: 4px solid black; */
+}
+
+.view-trainees-main h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.trainees-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    
+}
+
+.trainees-table th,
+.trainees-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    border: 4px double rgb(236, 195, 241);
+   
+}
+
+.trainees-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.trainees-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .view-trainees-main {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .navbar-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-menu {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .navbar-item {
+        margin-left: 0;
+        margin-bottom: 5px;
+    }
+
+    .navbar-link {
+        display: block;
+        padding: 10px;
+    }
+}

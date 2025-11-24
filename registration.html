@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="log_reg.css">
+    <style>
+    
+    label[ for=email],
+    label[ for=confirm],
+    label[for=fullname],
+    label[ for=admin],
+    label[ for=password],
+    label[ for=teacher],
+    label[ for=student],
+    label[ for=fullName],
+    label[ for=phone]
+
+    {
+        color: black;
+    }
+    .login-link a,
+    .register-link a{
+        color:blank;
+
+    }
+    .submit-btn{
+        color: black;
+    }
+    label{
+        font-weight: bold;
+        color: black;
+    }
+    h1{
+        color: black;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img src="https://img.icons8.com/ios-filled/50/000000/graduation-cap.png" alt="Graduation Cap" class="edu-icon">
+            <img src="https://img.icons8.com/ios-filled/50/000000/book.png" alt="Book" class="edu-icon">
+            <img src="https://img.icons8.com/ios-filled/50/000000/light-on.png" alt="Lightbulb" class="edu-icon">
+        </div>
+        <h1>User Registration</h1>
+        <form id="registrationForm" action="#" method="post">
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone number</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label>User Type:</label>
+                <div class="radio-group">
+                    <input type="radio" id="admin" name="userType" value="admin" required>
+                    <label for="admin">Admin</label>
+
+                    <input type="radio" id="teacher" name="userType" value="teacher">
+                    <label for="teacher">Trainer</label>
+
+                    <input type="radio" id="student" name="userType" value="student">
+                    <label for="student">Student</label>
+                </div>
+            </div>
+
+            <div class="form-group" id="subjectGroup" style="display: none;">
+                <label for="subject">Subject:</label>
+                <select id="subject" name="subject">
+                    <option value="">Select Subject</option>
+                    <option value="js">JavaScript</option>
+                    <option value="css">CSS</option>
+                    <option value="html">HTML</option>
+                    <option value="python">Python</option>
+                    <option value="java">Java</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="submit-btn">Register</button>
+            <p class="login-link">Already have an account? <a href="login.html">Login here</a></p>
+        </form>
+    </div>
+    
+    <script>
+        function getUsers() {
+            const users = localStorage.getItem('users');
+            return users ? JSON.parse(users) : [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        function getUserTypeCounts() {
+            const counts = localStorage.getItem('userTypeCounts');
+            return counts ? JSON.parse(counts) : { students: 100, admins: 30, trainers: 20 };
+        }
+
+        function saveUserTypeCounts(counts) {
+            localStorage.setItem('userTypeCounts', JSON.stringify(counts));
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        // Show/hide subject field based on user type
+        document.querySelectorAll('input[name="userType"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const subjectGroup = document.getElementById('subjectGroup');
+                if (e.target.value === 'teacher') {
+                    subjectGroup.style.display = 'block';
+                } else {
+                    subjectGroup.style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const phone = document.getElementById('phone').value.trim();
+            const userType = document.querySelector('input[name="userType"]:checked').value;
+            const subject = document.getElementById('subject').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            if (!fullName || !email) {
+                alert('Full Name and Email are required.');
+                return;
+            }
+
+            if (userType === 'teacher' && !subject) {
+                alert('Please select a subject for trainers.');
+                return;
+            }
+
+            let users = getUsers();
+            const existingUser = users.find(user => user.email.toLowerCase() === email.toLowerCase());
+
+            if (existingUser) {
+                alert('User with this email already exists!');
+                return;
+            }
+
+            // Add new user
+            users.push({ name: fullName, email, role: capitalizeFirstLetter(userType), status: 'Active', phone, subject: subject });
+            saveUsers(users);
+
+            // Update user type counts
+            let counts = getUserTypeCounts();
+            if (userType === 'student') {
+                counts.students++;
+            } else if (userType === 'admin') {
+                counts.admins++;
+            } else if (userType === 'teacher') {
+                counts.trainers++;
+            }
+            saveUserTypeCounts(counts);
+
+            alert('Registration successful! User added to the system.');
+            window.location.href = 'login.html';
+        });
+    </script>
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
