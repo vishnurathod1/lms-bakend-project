@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Lmsp',
+        'NAME': 'web',
         'USER': 'root',
         'PASSWORD': 'Vishnu@123',
         'HOST': 'localhost',
