@@ -6,3 +6,4 @@ urlpatterns = [
     path('assign/', views.assign_grade, name='assign_grade'),
     path('get/<int:student_id>/', views.get_grades, name='get_grades'),
 ]
+S
